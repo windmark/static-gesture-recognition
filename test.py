@@ -21,14 +21,11 @@ def euclidianDistance(x,y,z):
 
 
 print('---------------------')
-a,b,c,d = getPositions.getHandPositions('sample1.json')
-print(calculateDistances(a,b,c,d))
+print(calculateDistances(*getPositions.getHandPositions('sample1.json')))
 print('---------------------')
-a,b,c,d = getPositions.getHandPositions('sample2.json')
-print(calculateDistances(a,b,c,d))
+print(calculateDistances(*getPositions.getHandPositions('sample2.json')))
 print('---------------------')
-a,b,c,d = getPositions.getHandPositions('sample3.json')
-print(calculateDistances(a,b,c,d))
+print(calculateDistances(*getPositions.getHandPositions('sample3.json')))
 print('---------------------')
 
 

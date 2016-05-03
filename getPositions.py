@@ -17,28 +17,47 @@ def getHandPositions(filename):
 
     try:
         hand0 = data["hands"][0]["type"]
-        #position of palm center in format [x,distance,y] (or y,distance,x?)
-        rightPalmPosition = data["hands"][0]["palmPosition"]
 
-        #array with all fingertips in format [x,distance,y]
-        rightDistalPhalanges = []
-        for x in range(5):
-            rightDistalPhalanges.append(data["pointables"][x]["btipPosition"])
+        if hand0 == "right":
+            #position of palm center in format [x,distance,y] (or y,distance,x?)
+            rightPalmPosition = data["hands"][0]["palmPosition"]
+            #array with all fingertips in format [x,distance,y]
+            rightDistalPhalanges = []
+            for x in range(5):
+                rightDistalPhalanges.append(data["pointables"][x]["btipPosition"])
+        if hand0 == "left":
+            #position of palm center in format [x,distance,y] (or y,distance,x?)
+            leftPalmPosition = data["hands"][0]["palmPosition"]
+            #array with all fingertips in format [x,distance,y]
+            leftDistalPhalanges = []
+            for x in range(5):
+                leftDistalPhalanges.append(data["pointables"][x]["btipPosition"])
 
     except:
         print ("No first hand!")
+        #print sys.exc_info()
 
     try:
         hand1 = data["hands"][1]["type"]
-        #position of palm center in format [x,distance,y] (or y,distance,x?)
-        leftPalmPosition = data["hands"][1]["palmPosition"]
+        if hand1 == "right":
+            #position of palm center in format [x,distance,y] (or y,distance,x?)
+            rightPalmPosition = data["hands"][1]["palmPosition"]
 
-        #array with all fingertips in format [x,distance,y]
-        leftDistalPhalanges = []
-        for x in range(5,10):
-            leftDistalPhalanges.append(data["pointables"][x]["btipPosition"])
+            #array with all fingertips in format [x,distance,y]
+            rightDistalPhalanges = []
+            for x in range(5,10):
+                rightDistalPhalanges.append(data["pointables"][x]["btipPosition"])
+        if hand1 == "left":
+            #position of palm center in format [x,distance,y] (or y,distance,x?)
+            leftPalmPosition = data["hands"][1]["palmPosition"]
+
+            #array with all fingertips in format [x,distance,y]
+            leftDistalPhalanges = []
+            for x in range(5,10):
+                leftDistalPhalanges.append(data["pointables"][x]["btipPosition"])
+
     except:
         print ("No second hand!")
-        print sys.exc_info()
+        #print sys.exc_info()
 
     return(rightPalmPosition,rightDistalPhalanges,leftPalmPosition,leftDistalPhalanges)
