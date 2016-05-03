@@ -1,16 +1,16 @@
 import math
 import json
-from pprint import pprint
- 
-def calculateDistances(palmPosition, fingerTipPositions):
+import getPositions
+
+def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosition, leftFingerTipPositions):
 	featureVector = []
-	for n in range(0, len(fingerTipPositions)):
-		coordinates = fingerTipPositions[n]
+	for n in range(0, len(rightFingerTipPositions)):
+		coordinates = rightFingerTipPositions[n]
 		# Extract the distance in each direction
-		x = abs(coordinates[0] - palmPosition[0])
-		y = abs(coordinates[1] - palmPosition[1])
-		z = abs(coordinates[2] - palmPosition[2])
-		
+		x = abs(coordinates[0] - rightPalmPosition[0])
+		y = abs(coordinates[1] - rightPalmPosition[1])
+		z = abs(coordinates[2] - rightPalmPosition[2])
+
 		# Add the euclidian distance to the feature vector
 		featureVector.append(euclidianDistance(x,y,z))
 
@@ -19,35 +19,17 @@ def calculateDistances(palmPosition, fingerTipPositions):
 def euclidianDistance(x,y,z):
 	return math.sqrt(math.pow(x,2) + math.pow(y,2) + math.pow(z,2))
 
-def getPositions(filename):
-    #input data
-    with open(filename) as data_file:
-        data = json.load(data_file)
- 
-    #hand is "right" or "left"
-    rightLeft = data["hands"][0]["type"]
- 
-    #position of palm center in format [x,distance,y] (or y,distance,x?)
-    palmPosition = data["hands"][0]["palmPosition"]
- 
-    #array with all fingertips in format [x,distance,y]
-    dPhalanges = []
-    for x in range(5):
-        dPhalanges.append(data["pointables"][x]["btipPosition"])
- 
- 
-    featureVector = calculateDistances(palmPosition,dPhalanges)
-    print(featureVector)
- 
-print('---------------------')
-getPositions('sample1.json')
-print('---------------------')
-getPositions('sample2.json')
-print('---------------------')
-getPositions('sample3.json')
-print('---------------------')
 
-
+print('---------------------')
+a,b,c,d = getPositions.getHandPositions('sample1.json')
+print(calculateDistances(a,b,c,d))
+print('---------------------')
+a,b,c,d = getPositions.getHandPositions('sample2.json')
+print(calculateDistances(a,b,c,d))
+print('---------------------')
+a,b,c,d = getPositions.getHandPositions('sample3.json')
+print(calculateDistances(a,b,c,d))
+print('---------------------')
 
 
 
