@@ -7,22 +7,22 @@ def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosit
     featureVector = []
     if rightPalmPosition != [] and rightFingerTipPositions != []:
         for n in range(0, len(rightFingerTipPositions)):
-            coordinates = rightFingerTipPositions[n]
+            rightCoordinates = rightFingerTipPositions[n]
             # Extract the distance in each direction
-            x = abs(coordinates[0] - rightPalmPosition[0])
-            y = abs(coordinates[1] - rightPalmPosition[1])
-            z = abs(coordinates[2] - rightPalmPosition[2])
+            x = abs(rightCoordinates[0] - rightPalmPosition[0])
+            y = abs(rightCoordinates[1] - rightPalmPosition[1])
+            z = abs(rightCoordinates[2] - rightPalmPosition[2])
 
             # Add the euclidian distance to the feature vector
             featureVector.append(euclidianDistance(x,y,z))
 
     if (leftPalmPosition != [] and leftFingerTipPositions != []):
         for n in range(0, len(leftFingerTipPositions)):
-            coordinates = leftFingerTipPositions[n]
+            leftCoordinates = leftFingerTipPositions[n]
             # Extract the distance in each direction
-            x = abs(coordinates[0] - leftPalmPosition[0])
-            y = abs(coordinates[1] - leftPalmPosition[1])
-            z = abs(coordinates[2] - leftPalmPosition[2])
+            x = abs(leftCoordinates[0] - leftPalmPosition[0])
+            y = abs(leftCoordinates[1] - leftPalmPosition[1])
+            z = abs(leftCoordinates[2] - leftPalmPosition[2])
 
             # Add the euclidian distance to the feature vector
             featureVector.append(euclidianDistance(x,y,z))

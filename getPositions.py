@@ -34,9 +34,9 @@ def getHandPositions(filename):
                 leftDistalPhalanges.append(data["pointables"][x]["btipPosition"])
 
     except:
-        print ("No first hand!")
+        #print ("No first hand!")
         #print sys.exc_info()
-
+        pass
     try:
         hand1 = data["hands"][1]["type"]
         if hand1 == "right":
@@ -57,7 +57,8 @@ def getHandPositions(filename):
                 leftDistalPhalanges.append(data["pointables"][x]["btipPosition"])
 
     except:
-        print ("No second hand!")
+        pass
+        #print ("No second hand!")
         #print sys.exc_info()
 
     return(rightPalmPosition,rightDistalPhalanges,leftPalmPosition,leftDistalPhalanges)
