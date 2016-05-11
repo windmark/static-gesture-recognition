@@ -25,6 +25,7 @@ def getHandPositions(filename):
             rightDistalPhalanges = []
             for x in range(5):
                 rightDistalPhalanges.append(data["pointables"][x]["btipPosition"])
+
         if hand0 == "left":
             #position of palm center in format [x,distance,y] (or y,distance,x?)
             leftPalmPosition = data["hands"][0]["palmPosition"]
