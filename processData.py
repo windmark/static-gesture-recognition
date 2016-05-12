@@ -41,26 +41,27 @@ def euclidianDistance(x,y):
 
 def normalize(array):
     normalizedData = []
-    for n in range(0,2):
+    print (array)
+    for n in range(2):
         try:
-            for a in range(5):
-                tmp = array[a]
-                minval = min(array[n*5:(n+1)*5])
-                maxval= max(array[n*5:(n+1)*5])
+            minval = min(array[n*5:(n+1)*5])
+            maxval= max(array[n*5:(n+1)*5])
+            for a in range(0,5):
+                currentElement = array[a+(n*5)]
                 #normalizedData.append((tmp - minval) / (maxval - minval))
                 #rounding to 5 decimals
-                normalizedData.append(round((tmp - minval) / (maxval - minval),5))
+                normalizedData.append(round((currentElement - minval) / (maxval - minval),5))
         except:
             pass
     return normalizedData
 
 
 print('---------------------')
-print normalize(calculateDistances(*getPositions.getHandPositions('sample1.json')))
+#print(normalize(calculateDistances(*getPositions.getHandPositions('sample1.json'))))
 print('---------------------')
-print normalize(calculateDistances(*getPositions.getHandPositions('sample2.json')))
+#print(normalize(calculateDistances(*getPositions.getHandPositions('sample2.json'))))
 print('---------------------')
-print(calculateDistances(*getPositions.getHandPositions('sample3.json')))
+#print(normalize(calculateDistances(*getPositions.getHandPositions('sample3.json'))))
 print('---------------------')
 
 
