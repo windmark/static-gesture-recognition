@@ -14,7 +14,7 @@ from Leap import Finger
 
 
 
-class SampleListener(Leap.Listener):
+class Listener(Leap.Listener):
     left_hand_position = [-1, -1, -1]
     right_hand_position = [-1, -1, -1]
     finger_positions = [-1]*10
@@ -42,9 +42,9 @@ class SampleListener(Leap.Listener):
                 #print("%s %f, %f, %f" % (hand, pointable.tip_position[0], pointable.tip_position[1], pointable.tip_position[2]))
 
 
-def main():
+def start():
     # Create a sample listener and controller
-    listener = SampleListener()
+    listener = Listener()
     controller = Leap.Controller()
 
     # Have the sample listener receive events from the controller
@@ -60,14 +60,19 @@ def main():
         pass
     finally:
         # Remove the sample listener when done
-        returnValues.append(listener.left_hand_position)
-        returnValues.append(listener.right_hand_position)
+        #print listener.left_hand_position
+        for x in range(3):
+            returnValues.append(listener.left_hand_position[x])
+        for x in range(3):
+            returnValues.append(listener.right_hand_position[x])
+        #for x in range(5):
         returnValues.append(listener.finger_positions)
         controller.remove_listener(listener)
+        print returnValues
 
-    return returnValues
+    #return returnValues
         
 
 
 if __name__ == "__main__":
-    main()
+    start()
