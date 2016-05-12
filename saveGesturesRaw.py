@@ -14,16 +14,15 @@ def toFile(gestureNr):
 
     if min(leftPalm) == -999 or min(rightPalm) == -999:
         print "Couldn't find two hands!"
-        var = raw_input("Do you want to restart? Press y and enter\n")
-        #print "Do you want to restart?"
-        #var = sys.stdin.readlines(1)
-        if var == 'y' or var == 'Y':
+        userInput = raw_input("Do you want to restart? Press ONLY enter.\nELSE press a character then enter\n")
+        if userInput == '':
             toFile(gestureNr)
         else:
             print "Bye!"
     else:
         with open('rawData.txt', 'a') as text_file:
             text_file.write("{}\t{}\t{}\t{}\n".format(gesture,leftPalm,rightPalm,fingers))
+    return True
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
