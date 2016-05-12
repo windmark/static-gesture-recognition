@@ -1,17 +1,7 @@
-################################################################################
-# Copyright (C) 2012-2013 Leap Motion, Inc. All rights reserved.               #
-# Leap Motion proprietary and confidential. Not for distribution.              #
-# Use subject to the terms of the Leap Motion SDK Agreement available at       #
-# https://developer.leapmotion.com/sdk_agreement, or another agreement         #
-# between Leap Motion and you, your company or other organization.             #
-################################################################################
-
-
+from Leap import Finger
+import Leap
 import sys, thread, time
 sys.path.append("/Users/admin/Desktop/LeapSDK/lib/")
-import Leap
-from Leap import Finger
-
 
 
 class Listener(Leap.Listener):
@@ -69,24 +59,8 @@ def start():
             returnValues.append(listener.finger_positions)
         controller.remove_listener(listener)
         #print returnValues
-
+    #TODO: Return in format: [1,2,3],[4,5,6],[[7,8,9],[1,2,3],...[x,d,y]]
     return returnValues
 
-def convertString(handData):
-    #           leftPalm,rightPalm,Fingers
-    #handData = [[x,d,y],[x,d,y],[[x,d,y],...*10]]
-    handData()
-    return ('%a  %a  %a %a' % leftPalmArray
-
-
 if __name__ == "__main__":
-    dict = {1: 'INIT', 2: 'ALCOHOL', 3: 'NON-ALCOHOL', 4:'FOOD', 5: 'UNDO', 6:'CHECKOUT', 7:'CASH', 8:'CREDIT'}
-    if len(sys.argv) > 1:
-        print dict[int(sys.argv[1])]
-        returnValues = start()
-        if min(returnValues) == -999:
-            print "Hittade inte två händer, sparar inte."
-        else:
-
-            with open('rawData.txt', 'w') as file_:
-                file_.write(convertString())
+    start()
