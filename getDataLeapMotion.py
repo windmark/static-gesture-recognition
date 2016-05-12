@@ -41,6 +41,9 @@ def start():
     controller.add_listener(listener)
 
     returnValues = []
+    leftPalm = []
+    rightPalm = []
+    fingers = []
 
     # Keep this process running until Enter is pressed
     print "Press Enter to quit..."
@@ -52,14 +55,17 @@ def start():
         # Remove the sample listener when done
         #print listener.left_hand_position
         for x in range(3):
-            returnValues.append(listener.left_hand_position[x])
+            leftPalm.append(listener.left_hand_position[x])
         for x in range(3):
-            returnValues.append(listener.right_hand_position[x])
+            rightPalm.append(listener.right_hand_position[x])
         for x in range(10):
-            returnValues.append(listener.finger_positions)
+            fingers.append(listener.finger_positions)
         controller.remove_listener(listener)
         #print returnValues
-    #TODO: Return in format: [1,2,3],[4,5,6],[[7,8,9],[1,2,3],...[x,d,y]]
+    #Return in format: [1,2,3],[4,5,6],[[7,8,9],[1,2,3],...[x,d,y]]
+    returnValues.append(leftPalm)
+    returnValues.append(rightPalm)
+    returnValues.append(fingers)
     return returnValues
 
 if __name__ == "__main__":
