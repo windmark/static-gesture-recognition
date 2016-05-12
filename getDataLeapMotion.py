@@ -15,9 +15,9 @@ from Leap import Finger
 
 
 class Listener(Leap.Listener):
-    left_hand_position = [-1, -1, -1]
-    right_hand_position = [-1, -1, -1]
-    finger_positions = [-1]*10
+    left_hand_position = [-999, -999, -999]
+    right_hand_position = [-999, -999, -999]
+    finger_positions = [-999]*10
 
     def on_frame(self, controller):
         # Get the most recent frame and report some basic information
@@ -28,7 +28,7 @@ class Listener(Leap.Listener):
                 self.left_hand_position = hand.palm_position
             if(hand.is_right):
                 self.right_hand_position = hand.palm_position
-        
+
         for pointable in frame.pointables:
             if(pointable.is_finger):
                 if(pointable.hand.is_left):
@@ -38,7 +38,7 @@ class Listener(Leap.Listener):
 
                 finger = Finger(pointable)
                 self.finger_positions[5*hand+finger.type] = [pointable.tip_position[0], pointable.tip_position[1], pointable.tip_position[2]]
-                
+
                 #print("%s %f, %f, %f" % (hand, pointable.tip_position[0], pointable.tip_position[1], pointable.tip_position[2]))
 
 
@@ -65,14 +65,28 @@ def start():
             returnValues.append(listener.left_hand_position[x])
         for x in range(3):
             returnValues.append(listener.right_hand_position[x])
-        #for x in range(5):
-        returnValues.append(listener.finger_positions)
+        for x in range(10):
+            returnValues.append(listener.finger_positions)
         controller.remove_listener(listener)
-        print returnValues
+        #print returnValues
 
-    #return returnValues
-        
+    return returnValues
+
+def convertString(handData):
+    #           leftPalm,rightPalm,Fingers
+    #handData = [[x,d,y],[x,d,y],[[x,d,y],...*10]]
+    handData()
+    return ('%a  %a  %a %a' % leftPalmArray
 
 
 if __name__ == "__main__":
-    start()
+    dict = {1: 'INIT', 2: 'ALCOHOL', 3: 'NON-ALCOHOL', 4:'FOOD', 5: 'UNDO', 6:'CHECKOUT', 7:'CASH', 8:'CREDIT'}
+    if len(sys.argv) > 1:
+        print dict[int(sys.argv[1])]
+        returnValues = start()
+        if min(returnValues) == -999:
+            print "Hittade inte två händer, sparar inte."
+        else:
+
+            with open('rawData.txt', 'w') as file_:
+                file_.write(convertString())
