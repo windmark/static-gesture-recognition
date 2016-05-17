@@ -1,7 +1,7 @@
-from Leap import Finger
+import sys, thread
+sys.path.append("/Users/babaktr/LeapSDK/lib/")
 import Leap
-import sys, thread, time
-sys.path.append("/Users/admin/Desktop/LeapSDK/lib/")
+from Leap import Finger
 
 
 class Listener(Leap.Listener):
@@ -46,7 +46,8 @@ def start():
     fingers = []
 
     # Keep this process running until Enter is pressed
-    print "Press Enter to quit..."
+    
+    print "Press Enter to save"
     try:
         sys.stdin.readline()
     except KeyboardInterrupt:
