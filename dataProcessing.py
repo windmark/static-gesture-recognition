@@ -1,6 +1,8 @@
 import math
 import json
 import getPositions
+import numpy as np
+
 
 def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosition, leftFingerTipPositions):
     #print len(rightPalmPosition), len(rightFingerTipPositions), len(leftPalmPosition), len(leftFingerTipPositions)
@@ -55,9 +57,54 @@ def normalize(array):
     return normalizedData
 
 
+def readRawData(file):
+    label = np.loadtxt(file, delimiter = '\t', usecols = (0,), dtype = str, unpack = True)
+    rawLeftPalmData = np.loadtxt(file, delimiter = '\t', usecols = (1,), dtype = str)
+    rawRightPalmData = np.loadtxt(file, delimiter = '\t', usecols = (2,), dtype = str)
+    rawFingerData = np.loadtxt(file, delimiter = '\t', usecols = (3,), dtype = str)
+    
+    leftPalmData = []
+    for item in rawLeftPalmData:
+        item = item.translate(None, '[],')
+        floats = [float(s) for s in item.split()]
+        leftPalmData.append(floats)
+    
+    rightPalmData = []
+    for item in rawRightPalmData:
+        item = item.translate(None, '[],')
+        floats = [float(s) for s in item.split()]
+        rightPalmData.append(floats)
+
+    fingerData = []
+    for item in rawFingerData:
+        item = item.translate(None, '[],')
+        itemArray = [float(s) for s in item.split()]
+
+        i = 1
+        temp3 = []
+        temp30 = []
+        for element in itemArray:
+            temp3.append(element)
+            if i % 3 == 0:
+                temp30.append(temp3)
+                temp3 = []
+
+            if i % 30 == 0:
+                fingerData.append(temp30)
+                temp30 = []
+            i += 1
+    
+    return (leftPalmData, rightPalmData, fingerData)
+
+(leftPalmData, rightPalmData, fingerData) = readRawData('rawData.txt')
+
+
+
+'''
 print('---------------------')
 print normalize(calculateDistances(*getPositions.getHandPositions('sample1.json')))
 print('---------------------')
 print normalize(calculateDistances(*getPositions.getHandPositions('sample2.json')))
 print('---------------------')
 print(calculateDistances(*getPositions.getHandPositions('sample3.json')))
+'''
