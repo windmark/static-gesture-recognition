@@ -113,7 +113,6 @@ def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
 (leftPalmData, rightPalmData, fingerData, labelData) = readRawData('rawData.txt')
 featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)
 
-print(featureVectorList)
 
 featureFile = open('features.txt', 'a')
 i = 0
@@ -122,3 +121,4 @@ for vector in featureVectorList:
     for feature in vector:
         featureFile.write(", {}".format(feature))
     featureFile.write("\n")
+    i += 1
