@@ -40,7 +40,7 @@ def train_nn(inputData, outputData):
   #train_step = tf.train.RMSPropOptimizer(learnRate, decay=0.9, momentum=0.0, epsilon=1e-10, use_locking=False, name='RMSProp')
 
   '''Train using AdamOptimizer'''
-  #train_step = tf.train.AdamOptimizer.(learnRate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-08, use_locking=False, name='Adam')
+  #train_step = tf.train.AdamOptimizer(learnRate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-08, use_locking=False, name='Adam')
 
   # Add accuracy checking nodes
   tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
