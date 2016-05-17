@@ -53,7 +53,7 @@ def train_nn(inputData, outputData):
     sess.run(train_step, feed_dict={x: inputData, y_: outputData})
     result = sess.run(tf_accuracy, feed_dict={x: inputData, y_: outputData})
     if (i % 25 == 0):
-    	print("Run {},{}".format(i,result))
+      print("Run {},{}".format(i,result))
     k.append(result)
 
   # Evaluate model
@@ -89,23 +89,20 @@ def train_splitval(inputData, outputData, percentSplit = 0.7, n_neighbors = 3):
 
 ''' MAIN '''
 
-matrix_length = (len(np.loadtxt('input.txt', delimiter = ',', dtype = float)[0]))
+matrix_length = (len(np.loadtxt('features.txt', delimiter = ',', dtype = float)[0]))
 input_vector = [None] * matrix_length
 label_vector = [None] * matrix_length
 
-for n in range(0,matrix_length):
-    feature_vector = np.loadtxt('input.txt', 
-        delimiter = ',',
-        usecols = range(n,n+1),
-        dtype = float)
-    input_vector[n] = feature_vector
 
-for n in range(0,matrix_length):
-    feature_vector = np.loadtxt('label.txt', 
-        delimiter = ',',
-        usecols = range(n,n+1),
-        dtype = float)
-    label_vector[n] = feature_vector
+input_vector = np.loadtxt('features.txt', 
+    delimiter = ', ',
+    usecols = range(0,1),
+    dtype = str)
+
+label_vector = np.loadtxt('features.txt', 
+    delimiter = ', ',
+    usecols = range(1,11),
+    dtype = float)
 
 
 ''' TRAIN ANN '''
