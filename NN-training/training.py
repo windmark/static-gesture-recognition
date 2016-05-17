@@ -44,14 +44,6 @@ def train_nn(inputData, outputData):
   sess = tf.Session()
   sess.run(init)
 
-  # Split for early stopping
-  percentSplit = 0.7
-  x_train, x_test, y_train, y_test = cross_validation.train_test_split(inputData, 
-              outputData, 
-              test_size=(1.0-percentSplit), 
-              random_state=0)
-
-
   # Run each training operation with 1000 training examples
   k=[]
   saved=0
