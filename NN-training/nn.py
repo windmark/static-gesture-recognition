@@ -116,7 +116,7 @@ for n in range(0,matrix_length):
     label_vector[n] = feature_vector
 
 
-''' TRAIN NN '''
+''' TRAIN ANN '''
 train_nn(input_vector, label_vector)
 
 ''' TRAIN kNN '''
