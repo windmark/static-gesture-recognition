@@ -58,7 +58,7 @@ def normalize(array):
 
 
 def readRawData(file):
-    label = np.loadtxt(file, delimiter = '\t', usecols = (0,), dtype = str, unpack = True)
+    labelData = np.loadtxt(file, delimiter = '\t', usecols = (0,), dtype = str, unpack = True)
     rawLeftPalmData = np.loadtxt(file, delimiter = '\t', usecols = (1,), dtype = str)
     rawRightPalmData = np.loadtxt(file, delimiter = '\t', usecols = (2,), dtype = str)
     rawFingerData = np.loadtxt(file, delimiter = '\t', usecols = (3,), dtype = str)
@@ -93,7 +93,7 @@ def readRawData(file):
                 fingerData.append(temp30)
                 break
             i += 1
-    return (leftPalmData, rightPalmData, fingerData)
+    return (leftPalmData, rightPalmData, fingerData, labelData)
 
 
 def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
@@ -104,24 +104,21 @@ def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
         fingers = fingerData[i]
         half = len(fingers) / 2
         featureVector = calculateDistances(rightPalm, fingers[half:], leftPalm, fingers[:half])
-        featureVectorList.append(featureVector)
-    print(featureVectorList)
+        featureVectorList.append(normalize(featureVector))
+    return(featureVectorList)
 
 
 
 
-(leftPalmData, rightPalmData, fingerData) = readRawData('testData.txt')
+(leftPalmData, rightPalmData, fingerData, labelData) = readRawData('rawData.txt')
 featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)
+
 print(featureVectorList)
-print("test")
 
-
-
-'''
-print('---------------------')
-print normalize(calculateDistances(*getPositions.getHandPositions('sample1.json')))
-print('---------------------')
-print normalize(calculateDistances(*getPositions.getHandPositions('sample2.json')))
-print('---------------------')
-print(calculateDistances(*getPositions.getHandPositions('sample3.json')))
-'''
+featureFile = open('features.txt', 'a')
+i = 0
+for vector in featureVectorList:
+    featureFile.write("{}".format(labelData[i]))
+    for feature in vector:
+        featureFile.write(", {}".format(feature))
+    featureFile.write("\n")
