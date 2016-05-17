@@ -78,7 +78,7 @@ def readRawData(file):
     fingerData = []
     for item in rawFingerData:
         item = item.translate(None, '[],')
-        itemArray = [float(s) for s in item.split()]
+        itemArray = [float(s) for s in item.split(" ")]
 
         i = 1
         temp3 = []
@@ -91,12 +91,29 @@ def readRawData(file):
 
             if i % 30 == 0:
                 fingerData.append(temp30)
-                temp30 = []
+                break
             i += 1
-    
     return (leftPalmData, rightPalmData, fingerData)
 
-(leftPalmData, rightPalmData, fingerData) = readRawData('rawData.txt')
+
+def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
+    featureVectorList = []
+    for i in range(0, len(leftPalmData)):
+        leftPalm = leftPalmData[i]
+        rightPalm = rightPalmData[i]
+        fingers = fingerData[i]
+        half = len(fingers) / 2
+        featureVector = calculateDistances(rightPalm, fingers[half:], leftPalm, fingers[:half])
+        featureVectorList.append(featureVector)
+    print(featureVectorList)
+
+
+
+
+(leftPalmData, rightPalmData, fingerData) = readRawData('testData.txt')
+featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)
+print(featureVectorList)
+print("test")
 
 
 
