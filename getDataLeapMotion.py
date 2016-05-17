@@ -1,5 +1,5 @@
 import sys, thread
-sys.path.append("/Users/babaktr/LeapSDK/lib/")
+sys.path.append("/Users/admin/Desktop/LeapSDK/lib/")
 import Leap
 from Leap import Finger
 
