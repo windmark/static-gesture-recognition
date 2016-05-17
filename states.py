@@ -17,10 +17,7 @@ class Gstate:
 	gestures = {1: 'INIT', 2: 'ALCOHOL', 3: 'NON-ALCOHOL', 4:'FOOD', 5: 'UNDO', 6:'CHECKOUT', 7:'CASH', 8:'CREDIT CARD'}
 
 	def GestureState(self, gesture):
-		if gesture != 1 and self.current_state == 0:
-			printout(self,"Welcome!")
-
-		elif gesture == 1 and self.current_state == 0:
+		if gesture == 1 and self.current_state == 0:
 			self.current_state = 1
 			printout(self, "What would you like to order?")
 
@@ -50,12 +47,12 @@ class Gstate:
 			printout(self, "How would you like to pay?")
 
 		elif gesture == 7 and self.current_state == 2:
-			printout(self, "You paid for: " + str(self.cart)[1:-1] + "and payed with " + self.gestures[gesture])
+			printout(self, "You paid for {} and payed with {}".format(", ".join(self.cart), self.gestures[gesture]))
 			self.cart = []
 			self.current_state = 0
 
 		elif gesture == 8 and self.current_state == 2:
-			printout(self, "You paid for: " + str(self.cart)[1:-1] + "and payed with " + self.gestures[gesture])
+			printout(self, "You paid for {} and payed with {}".format(", ".join(self.cart), self.gestures[gesture]))
 			self.cart = []
 			self.current_state = 0
 
@@ -63,10 +60,11 @@ class Gstate:
 			self.current_state = 1
 			printout(self, "Back to order!")
 
+		'''
 		else:
 			printout(self, "Gesture {} not legit!".format(self.gestures[gesture]))
 			pass
-
+		'''
 ############################################### TEST ##################################################
 
 def timeToSleep():
@@ -80,11 +78,12 @@ gs.GestureState(1)
 timeToSleep()
 gs.GestureState(4)
 timeToSleep()
-gs.GestureState(1)
+gs.GestureState(2)
 timeToSleep()
-gs.GestureState(5)
+gs.GestureState(2)
 timeToSleep()
+gs.GestureState(4)
 gs.GestureState(6)
 timeToSleep()
 gs.GestureState(7)
-print "\n"
+#print "\n"
