@@ -42,5 +42,5 @@ def runUI(gesture):
 
 gs = states.Gstate()
 knn = Knn()
-knn.train('training/features.txt')
+knn.loadModel('training/knnModel.pkl')
 getDataFromLeapMotion()
