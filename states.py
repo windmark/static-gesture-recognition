@@ -66,7 +66,7 @@ class Gstate:
 			pass
 		'''
 ############################################### TEST ##################################################
-
+'''
 def timeToSleep():
 	time.sleep(0)
 
@@ -87,3 +87,4 @@ gs.GestureState(6)
 timeToSleep()
 gs.GestureState(7)
 #print "\n"
+'''

@@ -4,11 +4,11 @@ import states
 
 
 # Get input from Leap Motion
-def getDataLeapMotion():
-    pass
+def getDataFromLeapMotion():
+    sampleData(getDataLeapMotion.start())
 
-# Sample input every ½ seconds
-def sampleData():
+# Sample input every 1/2 seconds
+def sampleData(LMData):
     pass
 
 # Import classifier
@@ -20,5 +20,8 @@ def useClassifier():
     pass
 
 # Run states.py with gesture
-def runUI():
-    pass
+def runUI(gesture):
+    gs = states.Gstate()
+    gs.GestureState(gesture)
+
+runUI(1)
