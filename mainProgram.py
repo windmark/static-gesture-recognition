@@ -1,7 +1,7 @@
 import time, sys
 import states
-import training
-
+import getDataLeapMotion
+from training.training import Knn
 
 # Get input from Leap Motion
 def getDataFromLeapMotion():
@@ -14,9 +14,9 @@ def sampleData(LMData):
     useClassifier(sampledData)
 
 # Throw samples at classifier
-def useClassifier():
+def useClassifier(sampledData):
     #Classify should return a gesture int 1 to 8
-    runUI(training.classify())
+    runUI(training.Knn())
 
 # Run states.py with gesture
 def runUI(gesture):
