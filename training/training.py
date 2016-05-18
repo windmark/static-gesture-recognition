@@ -9,7 +9,7 @@ from sklearn.cross_validation import train_test_split
 from sklearn.externals import joblib
 
 
-
+''' KNN CLASS '''
 
 class Knn:
   featureFile = ''
@@ -37,7 +37,6 @@ class Knn:
 
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)
-    print("Model saved to %s" % file)
 
   def loadModel(self, file):
     self.trainedModel = joblib.load(file)
@@ -71,39 +70,62 @@ class Knn:
     print("Average: ", sum(scores) / len(scores))
 
 
+
+''' NEURAL NETWORK '''
+
 class NeuralNetwork:
+
   trainedModel = None
+  featureFile = ''
+  dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
-  def train(self, featureFile):
-    dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
-
+  def __loadData__(self, featureFile):
     label_vector_strings = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
     input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
 
     label_vector = []
     for n in range(0,len(label_vector_strings)):
-      index = dict[label_vector_strings[n]]
+      index = self.dict[label_vector_strings[n]]
       label_array_representation = [0, 0, 0, 0, 0, 0, 0, 0]
       label_array_representation[index] = 1
       label_vector.append(label_array_representation)
+    return (label_vector, input_vector)
+
+  def saveModel(self, file):
+    saver = tf.train.Saver()
+    save_path = saver.save(self.trainedModel, ("%s.ckpt" % file))
+    print("Model saved in file: %s" % save_path)
+
+  def loadModel(self, file):
+    saver = tf.train.Saver()
+    saver.restore(self.trainedModel, ("%s.ckpt" % file))
+    print("Model restored.")
+
+  def validateModel(self):
+    (label_vector, input_vector) = self.__loadData__(self.featureFile)
+
+
+  def train(self, featureFile):
+    self.featureFile = featureFile
+    (label_vector, input_vector) = self.__loadData__(featureFile)
     # Build computation graph by creating nodes for input images and target output classes
-    # 10 elements input
-    # 8 output classes
+    n_inputs = 10
+    n_outputs = 8
 
     # Network input 
-    x = tf.placeholder(tf.float32, [None, 10])
+    x = tf.placeholder(tf.float32, [None, n_inputs])
 
     # Network weights
-    W = tf.Variable(tf.zeros([10, 8]))
+    W = tf.Variable(tf.zeros([n_inputs, n_outputs]))
 
     # Network bias
-    b = tf.Variable(tf.zeros([8]))
+    b = tf.Variable(tf.zeros([n_outputs]))
 
     # Regression model implementation
     y = tf.nn.softmax(tf.matmul(x, W) + b)
 
     # To implement cross-entropy, a new placeholder is needed to input the correct answers
-    y_ = tf.placeholder(tf.float32, [None, 8])
+    y_ = tf.placeholder(tf.float32, [None, n_outputs])
 
     # Cost function
     cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
@@ -125,7 +147,7 @@ class NeuralNetwork:
     sess.run(init)
 
     # Add ops to save and restore all the variables.
-    saver = tf.train.Saver()
+    #saver = tf.train.Saver()
 
     # Run each training operation with 1000 training examples
     k=[]
@@ -146,15 +168,18 @@ class NeuralNetwork:
     k=np.array(k)
     print(np.where(k==k.max()))
     #sess.saveModele.save(sess, 'my-model', global_step=0)
-    save_path = saver.save(sess, "model.ckpt")
-    print("Model saved in file: %s" % save_path)
+    #save_path = saver.save(sess, "model.ckpt")
+    #print("Model saved in file: %s" % save_path)
     print("Max accuracy: {}".format(k.max()))
     print(' ')
     print('NN training Validation :: Done.\n')
     print ' '
 
-    saver.restore(sess, "model.ckpt")
-    print("Model restored.")
+    self.trainedModel = sess
+    return self.trainedModel
+
+    #saver.restore(sess, "model.ckpt")
+    #print("Model restored.")
 
 
 
