@@ -14,46 +14,46 @@ class Gstate:
 
 	current_state = 0
 	cart = []
-	gestures = {1: 'INIT', 2: 'ALCOHOL', 3: 'NON-ALCOHOL', 4:'FOOD', 5: 'UNDO', 6:'CHECKOUT', 7:'CASH', 8:'CREDIT CARD'}
+	gestures = {0: 'INIT', 1: 'ALCOHOL', 2: 'NON-ALCOHOL', 3:'FOOD', 4: 'UNDO', 5:'CHECKOUT', 6:'CASH', 7:'CREDIT CARD'}
 
 	def GestureState(self, gesture):
-		if gesture == 1 and self.current_state == 0:
+		if gesture == 0 and self.current_state == 0:
 			self.current_state = 1
-			os.system("say 'What sould you like to order?'") 
+			os.system("say 'What sould you like to order?'")
 			printout(self, "What would you like to order?")
+
+		elif gesture == 1 and self.current_state == 1:
+			self.cart.append(self.gestures[gesture])
+			os.system("say 'Alcoholic drink added!'")
+			printout(self, "Alcoholic drink added!")
 
 		elif gesture == 2 and self.current_state == 1:
 			self.cart.append(self.gestures[gesture])
-			os.system("say 'Alcoholic drink added!'") 
-			printout(self, "Alcoholic drink added!")
+			printout(self, "Non-alcohol drink added!")
 
 		elif gesture == 3 and self.current_state == 1:
 			self.cart.append(self.gestures[gesture])
-			printout(self, "Non-alcohol drink added!")
-
-		elif gesture == 4 and self.current_state == 1:
-			self.cart.append(self.gestures[gesture])
 			printout(self, "{} added.".format(self.gestures[gesture]))
 
-		elif gesture == 5 and self.current_state == 1 and len(self.cart) > 0:
+		elif gesture == 4 and self.current_state == 1 and len(self.cart) > 0:
 			removedItem = self.cart[len(self.cart)-1]
 			self.cart.pop()
 			printout(self, "Removed {} from cart".format(removedItem))
 
-		elif gesture == 5 and self.current_state == 1 and len(self.cart) == 0:
+		elif gesture == 4 and self.current_state == 1 and len(self.cart) == 0:
 			self.current_state = 0
 			printout(self, "Nothing more to remove, going back....... Welcome back")
 
-		elif gesture == 6 and self.current_state == 1:
+		elif gesture == 5 and self.current_state == 1:
 			self.current_state = 2
 			printout(self, "How would you like to pay?")
 
-		elif gesture == 7 and self.current_state == 2:
+		elif gesture == 6 and self.current_state == 2:
 			printout(self, "You paid for {} and payed with {}".format(", ".join(self.cart), self.gestures[gesture]))
 			self.cart = []
 			self.current_state = 0
 
-		elif gesture == 8 and self.current_state == 2:
+		elif gesture == 7 and self.current_state == 2:
 			printout(self, "You paid for {} and payed with {}".format(", ".join(self.cart), self.gestures[gesture]))
 			self.cart = []
 			self.current_state = 0
