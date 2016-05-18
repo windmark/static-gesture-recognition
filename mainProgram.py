@@ -11,10 +11,12 @@ def getDataFromLeapMotion():
         print "Couldn't find two hands!"
         getDataFromLeapMotion()
     else:
-        rawFingerData = rawFingerData[:30]
-        processedData = dataProcessing.convertToFeatureVectors([rawLeftPalmData],[rawRightPalmData],[rawFingerData])
-        print "processedData: {}".format(processedData)
-        sampleData(processedData)
+        #print "got here"
+        #print rawFingerData[0][:10]
+        rawFingerData2 = rawFingerData[0][:30]
+        processedData = dataProcessing.convertToFeatureVectors([rawLeftPalmData],[rawRightPalmData],[rawFingerData2])
+        #print "processedData: {}".format(processedData[0])
+        useClassifier(processedData[0])
 
 # Sample input every 1/2 seconds
 def sampleData(LMData):
@@ -25,11 +27,17 @@ def sampleData(LMData):
 # Throw samples at classifier
 def useClassifier(sampledData):
     #Classify should return a gesture int 1 to 8
-    runUI(training.Knn())
+    
+    gesture = knn.classify(sampledData)
+    print(gesture)
+    runUI(gesture)
 
 # Run states.py with gesture
 def runUI(gesture):
     gs = states.Gstate()
     gs.GestureState(gesture)
+    getDataFromLeapMotion()
 
+knn = Knn()
+knn.train('training/features.txt')
 getDataFromLeapMotion()

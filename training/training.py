@@ -33,7 +33,7 @@ class Knn:
 
   def classify(self, featureVector):
     predictedLabel = self.trainedModel.predict(featureVector)
-    return self.dict[predictedLabel[0]]
+    return dict[predictedLabel[0]]
 
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)

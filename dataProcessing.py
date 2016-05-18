@@ -136,10 +136,12 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
 def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
     featureVectorList = []
+    #print "fingers: {}".format(fingerData)
     for i in range(0, len(leftPalmData)):
         leftPalm = leftPalmData[i]
         rightPalm = rightPalmData[i]
         fingers = fingerData[i]
+
         half = len(fingers) / 2
         featureVector = calculateDistances(rightPalm, fingers[half:], leftPalm, fingers[:half])
         featureVectorList.append(normalize(featureVector))
