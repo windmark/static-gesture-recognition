@@ -1,6 +1,6 @@
 import time, sys
 import states
-
+import training
 
 
 # Get input from Leap Motion
@@ -9,15 +9,14 @@ def getDataFromLeapMotion():
 
 # Sample input every 1/2 seconds
 def sampleData(LMData):
-    pass
-
-# Import classifier
-def importClassifer():
-    pass
+    #TODO How many inputs per seconds do we get?
+    sampledData = LMData #TODO sample this first!
+    useClassifier(sampledData)
 
 # Throw samples at classifier
 def useClassifier():
-    pass
+    #Classify should return a gesture int 1 to 8
+    runUI(training.classify())
 
 # Run states.py with gesture
 def runUI(gesture):
