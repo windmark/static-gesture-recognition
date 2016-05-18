@@ -10,12 +10,12 @@ from sklearn.externals import joblib
 
 
 ''' KNN CLASS '''
+dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
 class Knn:
   featureFile = ''
   trainedModel = None
   n_neighbors = 2
-  dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
   def __loadData__(self, featureFile):
     label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
@@ -33,7 +33,7 @@ class Knn:
 
   def classify(self, featureVector):
     predictedLabel = self.trainedModel.predict(featureVector)
-    return self.dict[predictedLabel[0]]
+    return dict[predictedLabel[0]]
 
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)
@@ -135,6 +135,8 @@ class NeuralNetwork:
 
     #Train using gradient descent
     train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
+
+
 
     # Add accuracy checking nodes
     tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))

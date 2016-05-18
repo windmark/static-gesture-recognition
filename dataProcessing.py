@@ -100,21 +100,24 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
     leftPalmData = []
     for item in rawLeftPalmData:
-        item = item.translate(None, '[],')
-        floats = [float(s) for s in item.split()]
+        print item 
+        #item = item.translate(None, '[],')
+        #floats = [float(s) for s in item.split()]
+        floats = item
         leftPalmData.append(floats)
 
     rightPalmData = []
     for item in rawRightPalmData:
-        item = item.translate(None, '[],')
-        floats = [float(s) for s in item.split()]
+        #item = item.translate(None, '[],')
+        #floats = [float(s) for s in item.split()]
+        floats = item
         rightPalmData.append(floats)
 
     fingerData = []
     for item in rawFingerData:
-        item = item.translate(None, '[],')
-        itemArray = [float(s) for s in item.split(" ")]
-
+        #item = item.translate(None, '[],')
+        #itemArray = [float(s) for s in item.split(" ")]
+        itemArray = item
         i = 1
         temp3 = []
         temp30 = []
@@ -133,10 +136,12 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
 def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
     featureVectorList = []
+    #print "fingers: {}".format(fingerData)
     for i in range(0, len(leftPalmData)):
         leftPalm = leftPalmData[i]
         rightPalm = rightPalmData[i]
         fingers = fingerData[i]
+
         half = len(fingers) / 2
         featureVector = calculateDistances(rightPalm, fingers[half:], leftPalm, fingers[:half])
         featureVectorList.append(normalize(featureVector))
