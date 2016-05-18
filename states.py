@@ -1,4 +1,4 @@
-import time, sys
+import time, sys, os
 
 def printout(self, toPrint):
 	sys.stdout.write("\r {:<50s}".format(toPrint))
@@ -19,10 +19,12 @@ class Gstate:
 	def GestureState(self, gesture):
 		if gesture == 1 and self.current_state == 0:
 			self.current_state = 1
+			os.system("say 'What sould you like to order?'") 
 			printout(self, "What would you like to order?")
 
 		elif gesture == 2 and self.current_state == 1:
 			self.cart.append(self.gestures[gesture])
+			os.system("say 'Alcoholic drink added!'") 
 			printout(self, "Alcoholic drink added!")
 
 		elif gesture == 3 and self.current_state == 1:
@@ -66,7 +68,7 @@ class Gstate:
 			pass
 		'''
 ############################################### TEST ##################################################
-'''
+
 def timeToSleep():
 	time.sleep(0)
 
@@ -87,4 +89,4 @@ gs.GestureState(6)
 timeToSleep()
 gs.GestureState(7)
 #print "\n"
-'''
+
