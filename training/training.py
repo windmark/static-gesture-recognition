@@ -9,13 +9,13 @@ from sklearn.cross_validation import train_test_split
 from sklearn.externals import joblib
 
 
+dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
 
 class Knn:
   featureFile = ''
   trainedModel = None
   n_neighbors = 2
-  dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
   def __loadData__(self, featureFile):
     label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
@@ -75,8 +75,6 @@ class NeuralNetwork:
   trainedModel = None
 
   def train(self, featureFile):
-    dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
-
     label_vector_strings = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
     input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
 
@@ -113,6 +111,8 @@ class NeuralNetwork:
 
     #Train using gradient descent
     train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
+
+
 
     # Add accuracy checking nodes
     tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
