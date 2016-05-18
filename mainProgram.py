@@ -27,17 +27,17 @@ def sampleData(LMData):
 # Throw samples at classifier
 def useClassifier(sampledData):
     #Classify should return a gesture int 1 to 8
-    
+
     gesture = knn.classify(sampledData)
     print(gesture)
     runUI(gesture)
 
 # Run states.py with gesture
 def runUI(gesture):
-    gs = states.Gstate()
     gs.GestureState(gesture)
     getDataFromLeapMotion()
 
+gs = states.Gstate()
 knn = Knn()
 knn.train('training/features.txt')
 getDataFromLeapMotion()
