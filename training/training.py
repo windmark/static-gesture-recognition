@@ -121,5 +121,5 @@ for n in range(0,len(label_vector_strings)):
 ''' TRAIN ANN '''
 train_nn(input_vector, label_vector)
 
-''' TRAIN kNN '''
+''' TRAIN k-NN '''
 train_splitval(input_vector, label_vector_strings)
