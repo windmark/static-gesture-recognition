@@ -37,6 +37,7 @@ class Knn:
 
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)
+    print("Model saved to %s" % file)
 
   def loadModel(self, file):
     self.trainedModel = joblib.load(file)
