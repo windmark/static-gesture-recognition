@@ -6,13 +6,14 @@ from training.training import Knn
 
 # Get input from Leap Motion
 def getDataFromLeapMotion():
-    a = getDataLeapMotion.start()
-    rawLeftPalmData  = a[0]
-    rawRightPalmData = a[1]
-    rawFingerData = a[2]
-    processedData = dataProcessing.readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData)
-    print "got here {}".format(processedData)
-    sampleData(processedData)
+    rawLeftPalmData,rawRightPalmData,rawFingerData = getDataLeapMotion.start()
+    if min(rawLeftPalmData) == -999 or min(rawRightPalmData) == -999:
+        print "Couldn't find two hands!"
+        getDataFromLeapMotion()
+    else:
+        processedData = dataProcessing.readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData)
+        print "got here {}".format(processedData)
+        sampleData(processedData)
 
 # Sample input every 1/2 seconds
 def sampleData(LMData):
