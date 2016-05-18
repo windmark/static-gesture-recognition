@@ -96,7 +96,7 @@ def readRawData(file):
     return (leftPalmData, rightPalmData, fingerData, labelData)
 
 
-def readRawDataAsArguments(labelData, rawLeftPalmData, rawRightPalmData, rawFingerData)
+def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
     leftPalmData = []
     for item in rawLeftPalmData:
@@ -128,7 +128,7 @@ def readRawDataAsArguments(labelData, rawLeftPalmData, rawRightPalmData, rawFing
                 fingerData.append(temp30)
                 break
             i += 1
-    return (leftPalmData, rightPalmData, fingerData, labelData)
+    return (leftPalmData, rightPalmData, fingerData)
 
 
 def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):

@@ -71,7 +71,7 @@ class Gstate:
 
 def timeToSleep():
 	time.sleep(0)
-
+'''
 gs = Gstate()
 
 gs.GestureState(0)
@@ -90,3 +90,4 @@ timeToSleep()
 gs.GestureState(7)
 #print "\n"
 
+'''
