@@ -100,21 +100,24 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
     leftPalmData = []
     for item in rawLeftPalmData:
-        item = item.translate(None, '[],')
-        floats = [float(s) for s in item.split()]
+        print item 
+        #item = item.translate(None, '[],')
+        #floats = [float(s) for s in item.split()]
+        floats = item
         leftPalmData.append(floats)
 
     rightPalmData = []
     for item in rawRightPalmData:
-        item = item.translate(None, '[],')
-        floats = [float(s) for s in item.split()]
+        #item = item.translate(None, '[],')
+        #floats = [float(s) for s in item.split()]
+        floats = item
         rightPalmData.append(floats)
 
     fingerData = []
     for item in rawFingerData:
-        item = item.translate(None, '[],')
-        itemArray = [float(s) for s in item.split(" ")]
-
+        #item = item.translate(None, '[],')
+        #itemArray = [float(s) for s in item.split(" ")]
+        itemArray = item
         i = 1
         temp3 = []
         temp30 = []
