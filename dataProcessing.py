@@ -62,13 +62,48 @@ def readRawData(file):
     rawLeftPalmData = np.loadtxt(file, delimiter = '\t', usecols = (1,), dtype = str)
     rawRightPalmData = np.loadtxt(file, delimiter = '\t', usecols = (2,), dtype = str)
     rawFingerData = np.loadtxt(file, delimiter = '\t', usecols = (3,), dtype = str)
-    
+
     leftPalmData = []
     for item in rawLeftPalmData:
         item = item.translate(None, '[],')
         floats = [float(s) for s in item.split()]
         leftPalmData.append(floats)
-    
+
+    rightPalmData = []
+    for item in rawRightPalmData:
+        item = item.translate(None, '[],')
+        floats = [float(s) for s in item.split()]
+        rightPalmData.append(floats)
+
+    fingerData = []
+    for item in rawFingerData:
+        item = item.translate(None, '[],')
+        itemArray = [float(s) for s in item.split(" ")]
+
+        i = 1
+        temp3 = []
+        temp30 = []
+        for element in itemArray:
+            temp3.append(element)
+            if i % 3 == 0:
+                temp30.append(temp3)
+                temp3 = []
+
+            if i % 30 == 0:
+                fingerData.append(temp30)
+                break
+            i += 1
+    return (leftPalmData, rightPalmData, fingerData, labelData)
+
+
+def readRawDataAsArguments(labelData, rawLeftPalmData, rawRightPalmData, rawFingerData)
+
+    leftPalmData = []
+    for item in rawLeftPalmData:
+        item = item.translate(None, '[],')
+        floats = [float(s) for s in item.split()]
+        leftPalmData.append(floats)
+
     rightPalmData = []
     for item in rawRightPalmData:
         item = item.translate(None, '[],')
@@ -109,16 +144,16 @@ def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
 
 
 
+def processData():
+    (leftPalmData, rightPalmData, fingerData, labelData) = readRawData('rawData.txt')
+    featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)
 
-(leftPalmData, rightPalmData, fingerData, labelData) = readRawData('rawData.txt')
-featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)
-
-
-featureFile = open('features.txt', 'a')
-i = 0
-for vector in featureVectorList:
-    featureFile.write("{}".format(labelData[i]))
-    for feature in vector:
-        featureFile.write(", {}".format(feature))
-    featureFile.write("\n")
-    i += 1
+def saveData():
+    featureFile = open('features.txt', 'a')
+    i = 0
+    for vector in featureVectorList:
+        featureFile.write("{}".format(labelData[i]))
+        for feature in vector:
+            featureFile.write(", {}".format(feature))
+        featureFile.write("\n")
+        i += 1

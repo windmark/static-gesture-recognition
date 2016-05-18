@@ -1,11 +1,14 @@
 import time, sys
 import states
 import getDataLeapMotion
+import dataProcessing
 from training.training import Knn
 
 # Get input from Leap Motion
 def getDataFromLeapMotion():
-    sampleData(getDataLeapMotion.start())
+    labelData, rawLeftPalmData, rawRightPalmData, rawFingerData = *getDataLeapMotion.start()
+    processedData = dataProcessing.readRawDataAsArguments(labelData, rawLeftPalmData, rawRightPalmData, rawFingerData)
+    sampleData(processedData)
 
 # Sample input every 1/2 seconds
 def sampleData(LMData):
