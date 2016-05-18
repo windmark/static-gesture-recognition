@@ -11,8 +11,9 @@ def getDataFromLeapMotion():
         print "Couldn't find two hands!"
         getDataFromLeapMotion()
     else:
-        processedData = dataProcessing.readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData)
-        print "got here {}".format(processedData)
+        rawFingerData = rawFingerData[:30]
+        processedData = dataProcessing.convertToFeatureVectors([rawLeftPalmData],[rawRightPalmData],[rawFingerData])
+        print "processedData: {}".format(processedData)
         sampleData(processedData)
 
 # Sample input every 1/2 seconds
