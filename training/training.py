@@ -9,9 +9,10 @@ from sklearn.cross_validation import train_test_split
 from sklearn.externals import joblib
 
 
-''' KNN CLASS '''
+
 dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
+''' KNN CLASS '''
 class Knn:
   featureFile = ''
   trainedModel = None
@@ -32,8 +33,9 @@ class Knn:
     return self.trainedModel
 
   def classify(self, featureVector):
-    predictedLabel = self.trainedModel.predict(featureVector)
-    return dict[predictedLabel[0]]
+    predicted = self.trainedModel.predict(np.array(featureVector).reshape(1,-1))
+    label = dict[predicted[0]]
+    return label
 
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)
@@ -72,7 +74,6 @@ class Knn:
 
 
 ''' NEURAL NETWORK '''
-
 class NeuralNetwork:
 
   trainedModel = None
