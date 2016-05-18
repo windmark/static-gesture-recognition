@@ -59,12 +59,21 @@ class Knn:
 
 
 
-
-
 class NeuralNetwork:
   trainedModel = None
 
   def train(self, featureFile):
+    dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
+
+    label_vector_strings = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
+    input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
+
+    label_vector = []
+    for n in range(0,len(label_vector_strings)):
+      index = dict[label_vector_strings[n]]
+      label_array_representation = [0, 0, 0, 0, 0, 0, 0, 0]
+      label_array_representation[index] = 1
+      label_vector.append(label_array_representation)
     # Build computation graph by creating nodes for input images and target output classes
     # 10 elements input
     # 8 output classes
@@ -92,6 +101,51 @@ class NeuralNetwork:
 
     #Train using gradient descent
     train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
+
+    # Add accuracy checking nodes
+    tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
+    tf_accuracy = tf.reduce_mean(tf.cast(tf_correct_prediction, "float"))
+
+    # Init variables
+    init = tf.initialize_all_variables()
+
+    sess = tf.Session()
+    sess.run(init)
+
+    # Add ops to save and restore all the variables.
+    saver = tf.train.Saver()
+
+    # Run each training operation with 1000 training examples
+    k=[]
+    saved=0
+    for i in range(350):
+      #sess.run(train_step, feed_dict={x: x_train, y_: y_train})
+      #result = sess.run(tf_accuracy, feed_dict={x: x_test, y_: y_test})
+      sess.run(train_step, feed_dict={x: input_vector, y_: label_vector})
+      result = sess.run(tf_accuracy, feed_dict={x: input_vector, y_: label_vector})
+      if (i % 25 == 0):
+        print("Run {},{}".format(i,result))
+      k.append(result)
+
+    # Evaluate model
+    correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
+    k=np.array(k)
+    print(np.where(k==k.max()))
+    #sess.saveModele.save(sess, 'my-model', global_step=0)
+    save_path = saver.save(sess, "model.ckpt")
+    print("Model saved in file: %s" % save_path)
+    print("Max accuracy: {}".format(k.max()))
+    print(' ')
+    print('NN training Validation :: Done.\n')
+    print ' '
+
+    saver.restore(sess, "model.ckpt")
+    print("Model restored.")
+
+
+
 
 
 '''
