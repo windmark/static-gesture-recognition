@@ -14,13 +14,17 @@ from sklearn.externals import joblib
 class Knn:
   featureFile = ''
   trainedModel = None
-  n_neighbors = 5
+  n_neighbors = 2
   dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
+
+  def __loadData__(self, featureFile):
+    label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
+    input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
+    return (label_vector, input_vector)
 
   def train(self, featureFile):
     self.featureFile = featureFile
-    label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
-    input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
+    (label_vector, input_vector) = self.__loadData__(featureFile)
 
     kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
     kNNClassifier.fit(input_vector, label_vector)
@@ -37,26 +41,33 @@ class Knn:
   def loadModel(self, file):
     self.trainedModel = joblib.load(file)
 
-  def validateModel(self):
+  def splitValidateModel(self):
     percentSplit = 0.7
-    n_neighbors = 2
 
-    label_vector = np.loadtxt(self.featureFile, delimiter = ', ', usecols = (0,), dtype = str)
-    input_vector = np.loadtxt(self.featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
+    (label_vector, input_vector) = self.__loadData__(self.featureFile)
 
     trainData, testData, trainLabels, testLabels = cross_validation.train_test_split(input_vector, 
           label_vector, test_size=(1.0-percentSplit), random_state=0)
 
-    kNNClassifier = neighbors.KNeighborsClassifier(n_neighbors, weights='distance')
+    kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
     kNNClassifier.fit(trainData, trainLabels) 
     predictedLabels = kNNClassifier.predict(testData)
     
     print("Classification report for classifier %s:\n%s\n"
           % ('k-NearestNeighbour', metrics.classification_report(testLabels, predictedLabels)))
     print("Confusion matrix:\n%s" % metrics.confusion_matrix(testLabels, predictedLabels))
-    print(' ')
     print('Split Validation training :: Done.\n')
 
+  def crossValidateModel(self):
+    (label_vector, input_vector) = self.__loadData__(self.featureFile)
+    kFold = 5
+
+    kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
+    scores = cross_validation.cross_val_score(kNNClassifier, input_vector, label_vector, cv = kFold)
+    
+    print("\n----- k-fold Cross Validation -----")
+    print(scores)
+    print("Average: ", sum(scores) / len(scores))
 
 
 
