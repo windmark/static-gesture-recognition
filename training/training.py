@@ -9,11 +9,12 @@ from sklearn.cross_validation import train_test_split
 from sklearn.externals import joblib
 
 
-dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
+
 
 class Knn:
   trainedModel = None
   n_neighbors = 5
+  dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
   def train(self, featureFile):
     label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
@@ -26,7 +27,10 @@ class Knn:
 
   def classify(self, featureVector):
     predictedLabel = self.trainedModel.predict(featureVector)
-    return predictedLabel[0]
+    return self.dict[predictedLabel[0]]
 
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)
+
+  def loadModel(self, file):
+    self.trainedModel = joblib.load(file)
