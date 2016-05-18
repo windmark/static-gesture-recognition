@@ -60,7 +60,9 @@ class Gstate:
 
 		elif gesture == 5 and self.current_state == 2:
 			self.current_state = 1
-			printout(self, "Back to order!")
+			printout(self, "Bye!")
+			return 99
+
 
 		'''
 		else:

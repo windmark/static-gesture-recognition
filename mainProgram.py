@@ -34,8 +34,11 @@ def useClassifier(sampledData):
 
 # Run states.py with gesture
 def runUI(gesture):
-    gs.GestureState(gesture)
-    getDataFromLeapMotion()
+    end = gs.GestureState(gesture)
+    if end != 99:
+        getDataFromLeapMotion()
+    else:
+        return True
 
 gs = states.Gstate()
 knn = Knn()
