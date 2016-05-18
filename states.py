@@ -58,18 +58,19 @@ class Gstate:
 			printout(self, "You paid for {} and payed with {}".format(", ".join(self.cart), self.gestures[gesture]))
 			self.cart = []
 			self.current_state = 0
+			return 99
 
 		elif gesture == 7 and self.current_state == 2:
 			os.system("say 'You paid with card!'")
 			printout(self, "You paid for {} and payed with {}".format(", ".join(self.cart), self.gestures[gesture]))
 			self.cart = []
 			self.current_state = 0
+			return 99
 
 		elif gesture == 5 and self.current_state == 2:
 			self.current_state = 1
-			os.system("say 'Bye!'")
-			printout(self, "Bye!")
-			return 99
+			os.system("say 'Back to order'")
+			printout(self, "Back to order!")
 
 
 		'''
