@@ -43,6 +43,19 @@ class Knn:
   def loadModel(self, file):
     self.trainedModel = joblib.load(file)
 
+  def externalValidateModel(self, separateFeatureFile):
+    (label_vector, input_vector) = self.__loadData__(self.featureFile)    
+    (test_label_vector, test_input_vector) = self.__loadData__(separateFeatureFile)
+
+    predictedLabels = self.trainedModel.predict(test_input_vector)
+
+    print("Classification report for classifier %s:\n%s\n"
+          % ('k-NearestNeighbour', metrics.classification_report(test_label_vector, predictedLabels)))
+    print("Confusion matrix:\n%s" % metrics.confusion_matrix(test_label_vector, predictedLabels))
+    print('Split Validation training :: Done.\n')
+
+
+
   def splitValidateModel(self):
     percentSplit = 0.7
 
