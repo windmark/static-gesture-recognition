@@ -3,8 +3,8 @@ import getDataLeapMotion
 
 
 '''
-toFile()
-
+Saves raw data from Leap Motion together with gesture name
+Input: gesture as int
 '''
 def toFile(gestureNr):
     gestures = {0: 'INIT', 1: 'ALCOHOL', 2: 'NON-ALCOHOL', 3:'FOOD', 4: 'UNDO', 5:'CHECKOUT', 6:'CASH', 7:'CREDIT'}
