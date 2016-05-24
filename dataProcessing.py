@@ -3,7 +3,6 @@ import json
 import getPositions
 import numpy as np
 
-
 def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosition, leftFingerTipPositions):
     featureVector = []
     if rightPalmPosition != [] and rightFingerTipPositions != []:
@@ -35,6 +34,9 @@ def euclidian3DDistance(x,y,z):
 def euclidianDistance(x,y):
     return math.sqrt(math.pow(x,2) + math.pow(y,2))
 
+'''
+Normalizes and rounds to five decimals
+'''
 def normalize(array):
     normalizedData = []
     for n in range(0,2):
@@ -50,7 +52,9 @@ def normalize(array):
             pass
     return normalizedData
 
-
+'''
+Parsing the txt files to extract the data.
+'''
 def readRawData(file):
     labelData = np.loadtxt(file, delimiter = '\t', usecols = (0,), dtype = str, unpack = True)
     rawLeftPalmData = np.loadtxt(file, delimiter = '\t', usecols = (1,), dtype = str)
@@ -90,6 +94,7 @@ def readRawData(file):
     return (leftPalmData, rightPalmData, fingerData, labelData)
 
 
+# TODO: Not used anymore?
 def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
     leftPalmData = []
@@ -120,7 +125,10 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
             i += 1
     return (leftPalmData, rightPalmData, fingerData)
 
-
+'''
+Orders data to featureVector format: right palm, right fingers, left palm, left fingers
+Normalizing
+'''
 def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
     featureVectorList = []
     for i in range(0, len(leftPalmData)):
@@ -135,7 +143,7 @@ def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
 
 
 
-
+# TODO: Not used?
 def saveFeatureData(featureFileName, dataFileName):
     (leftPalmData, rightPalmData, fingerData, labelData) = readRawData(dataFileName)
     featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)

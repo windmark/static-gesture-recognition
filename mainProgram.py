@@ -6,33 +6,31 @@ from training.training import Knn
 
 # Get input from Leap Motion
 def getDataFromLeapMotion():
+    # Get data from Leap Motion
     rawLeftPalmData,rawRightPalmData,rawFingerData = getDataLeapMotion.start()
+
+    # Check if the Leap Motion found two hands
     if min(rawLeftPalmData) == -999 or min(rawRightPalmData) == -999:
         print "Couldn't find two hands!"
+        # If not, re run function
         getDataFromLeapMotion()
     else:
-        #print "got here"
-        #print rawFingerData[0][:10]
+        # Remove redundant (duplicates) finger data
         rawFingerData2 = rawFingerData[0][:30]
+        # Orders data to featureVector format: right palm, right fingers, left palm, left fingers
+        # convertToFeatureVectors also normalizes data.
         processedData = dataProcessing.convertToFeatureVectors([rawLeftPalmData],[rawRightPalmData],[rawFingerData2])
-        #print "processedData: {}".format(processedData[0])
-        useClassifier(processedData[0])
 
-# Sample input every 1/2 seconds
-def sampleData(LMData):
-    #TODO How many inputs per seconds do we get?
-    sampledData = LMData #TODO sample this first!
-    useClassifier(sampledData)
+        useClassifier(processedData[0])
 
 # Throw samples at classifier
 def useClassifier(sampledData):
-    #Classify should return a gesture int 1 to 8
-
+    #Classify should return a gesture as int in the range [0 to 7]
     gesture = knn.classify(sampledData)
     print(gesture)
     runUI(gesture)
 
-# Run states.py with gesture
+# Run states.py, the UI, with gesture
 def runUI(gesture):
     end = gs.GestureState(gesture)
     if end != 99:
@@ -40,7 +38,12 @@ def runUI(gesture):
     else:
         return True
 
-gs = states.Gstate()
-knn = Knn()
-knn.loadModel('training/knnModel.pkl')
-getDataFromLeapMotion()
+
+'''
+
+'''
+if __name__ == "__main__":
+    gs = states.Gstate()
+    knn = Knn()
+    knn.loadModel('training/knnModel.pkl')
+    getDataFromLeapMotion()

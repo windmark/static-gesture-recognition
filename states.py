@@ -1,21 +1,28 @@
 import time, sys, os
 
+# Print function to get right indents
 def printout(self, toPrint):
 	sys.stdout.write("\r {:<50s}".format(toPrint))
 	printCart(self.cart)
-	#sys.stdout.flush()
 
+# Print what is in the cart
 def printCart(cart):
 	print("{:>50}{}".format('Cart: ', ', '.join(cart)))
-	#sys.stdout.write("{:>75}{}".format('Cart: ', ', '.join(cart)))
-	#sys.stdout.flush()
 
+'''
+Gstate contains the state in the program flow and the cart.
+It also contains the main UI progrm flow function, GestureState.
+'''
 class Gstate:
-
 	current_state = 0
 	cart = []
 	gestures = {0: 'INIT', 1: 'ALCOHOL', 2: 'NON-ALCOHOL', 3:'FOOD', 4: 'UNDO', 5:'CHECKOUT', 6:'CASH', 7:'CREDIT CARD'}
 
+
+	'''
+	GestureState is the UI and main program flow.
+	Input arguments: class state and gesture as int in the range [0, 7]
+	'''
 	def GestureState(self, gesture):
 		if gesture == 0 and self.current_state == 0:
 			self.current_state = 1
@@ -71,34 +78,3 @@ class Gstate:
 			self.current_state = 1
 			os.system("say 'Back to order'")
 			printout(self, "Back to order!")
-
-
-		'''
-		else:
-			printout(self, "Gesture {} not legit!".format(self.gestures[gesture]))
-			pass
-		'''
-############################################### TEST ##################################################
-
-def timeToSleep():
-	time.sleep(0)
-'''
-gs = Gstate()
-
-gs.GestureState(0)
-timeToSleep()
-gs.GestureState(1)
-timeToSleep()
-gs.GestureState(4)
-timeToSleep()
-gs.GestureState(2)
-timeToSleep()
-gs.GestureState(2)
-timeToSleep()
-gs.GestureState(4)
-gs.GestureState(6)
-timeToSleep()
-gs.GestureState(7)
-#print "\n"
-
-'''
