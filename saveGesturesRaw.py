@@ -1,23 +1,24 @@
 import sys, thread
 import getDataLeapMotion
 
-def start2():
-    return [1,2,3],[4,5,-99],[[7,8,9],[1,2,3]]
 
+'''
+toFile()
+
+'''
 def toFile(gestureNr):
-    dict = {1: 'INIT', 2: 'ALCOHOL', 3: 'NON-ALCOHOL', 4:'FOOD', 5: 'UNDO', 6:'CHECKOUT', 7:'CASH', 8:'CREDIT'}
-    gesture = dict[gestureNr]
+    gestures = {0: 'INIT', 1: 'ALCOHOL', 2: 'NON-ALCOHOL', 3:'FOOD', 4: 'UNDO', 5:'CHECKOUT', 6:'CASH', 7:'CREDIT'}
+    gesture = gestures[gestureNr]
     print '-------------------------------------'
     print "Attempting gesture {}".format(gesture)
 
-    #leftPalm, rightPalm, fingers = start2()
+    #Get data from Leap Motion
     leftPalm, rightPalm, fingers = getDataLeapMotion.start()
-    #print leftPalm
-    #print rightPalm
-    #print fingers
 
+    # Check if real hands were found.
     if min(leftPalm) == -999 or min(rightPalm) == -999:
         print "Couldn't find two hands!"
+        # Restart process if two hands were not found
         userInput = raw_input("Do you want to restart?")
 
         if userInput == '':
@@ -26,9 +27,19 @@ def toFile(gestureNr):
             print "Bye!"
     else:
         with open('rawData.txt', 'a') as text_file:
+            # Save to file (adding to what is already in the file)
             text_file.write("{}\t{}\t{}\t{}\n".format(gesture,leftPalm,rightPalm,fingers))
     return True
 
+
+'''
+saveGesturesRaw
+Connects to Leap Motion (through getDataLeapMotion)
+Saves the raw data of the gesture to rawData.txt
+
+Input arguments: int in the range [0, 7]
+The input arguments tells what gesture to classify as.
+'''
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         toFile(int(sys.argv[1]))

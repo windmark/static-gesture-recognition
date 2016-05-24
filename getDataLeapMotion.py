@@ -8,6 +8,8 @@ Listener
 Connects to the Leap Motion and extracts the data.
 '''
 class Listener(Leap.Listener):
+    # Set default positions to -999 in order to know
+    # when the Leap Motion has not found hands.
     left_hand_position = [-999, -999, -999]
     right_hand_position = [-999, -999, -999]
     finger_positions = [-999]*10
@@ -60,7 +62,7 @@ def start():
     except KeyboardInterrupt:
         pass
     finally:
-        #Save the data into lists, from numpy.arrays
+        # Save the data into lists, from numpy.arrays
         for x in range(3):
             leftPalm.append(listener.left_hand_position[x])
         for x in range(3):
