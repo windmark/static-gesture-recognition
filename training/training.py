@@ -172,7 +172,7 @@ class NeuralNetwork:
     cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
 
     # Train the model
-    learnRate = 0.9
+    learnRate = 0.01
 
     #Train using gradient descent
     train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
@@ -193,7 +193,7 @@ class NeuralNetwork:
     # Run each training operation with 1000 training examples
     k=[]
     saved=0
-    for i in range(350):
+    for i in range(10000):
       #sess.run(train_step, feed_dict={x: x_train, y_: y_train})
       #result = sess.run(tf_accuracy, feed_dict={x: x_test, y_: y_test})
       sess.run(train_step, feed_dict={x: input_vector, y_: label_vector})
