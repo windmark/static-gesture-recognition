@@ -5,29 +5,23 @@ import numpy as np
 
 
 def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosition, leftFingerTipPositions):
-    #print len(rightPalmPosition), len(rightFingerTipPositions), len(leftPalmPosition), len(leftFingerTipPositions)
     featureVector = []
     if rightPalmPosition != [] and rightFingerTipPositions != []:
         for n in range(0, len(rightFingerTipPositions)):
-            #rightFingerPosition = rightFingerTipPositions[n]
             # Extract the distance in each direction
             x = abs(rightFingerTipPositions[n][0] - rightPalmPosition[0])
-            #d = abs(rightFingerTipPositions[n][1] - rightPalmPosition[1])
             y = abs(rightFingerTipPositions[n][2] - rightPalmPosition[2])
 
             # Add the euclidian distance to the feature vector
             fingerDistance = euclidianDistance(x, y)
-            #print fingerDistance
 
             featureVector.append(euclidianDistance(x,y))
 
 
     if (leftPalmPosition != [] and leftFingerTipPositions != []):
         for n in range(0, len(leftFingerTipPositions)):
-            #leftFingerPosition = leftFingerTipPositions[n]
             # Extract the distance in each direction
             x = abs(leftFingerTipPositions[n][0] - leftPalmPosition[0])
-            #d = abs(leftFingerTipPositions[n][1] - leftPalmPosition[1])
             y = abs(leftFingerTipPositions[n][2] - leftPalmPosition[2])
 
             # Add the euclidian distance to the feature vector
@@ -49,7 +43,7 @@ def normalize(array):
                 tmp = array[a]
                 minval = min(array[n*5:(n+1)*5])
                 maxval= max(array[n*5:(n+1)*5])
-                #normalizedData.append((tmp - minval) / (maxval - minval))
+
                 #rounding to 5 decimals
                 normalizedData.append(round((tmp - minval) / (maxval - minval),5))
         except:
@@ -100,23 +94,16 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
     leftPalmData = []
     for item in rawLeftPalmData:
-        print item 
-        #item = item.translate(None, '[],')
-        #floats = [float(s) for s in item.split()]
         floats = item
         leftPalmData.append(floats)
 
     rightPalmData = []
     for item in rawRightPalmData:
-        #item = item.translate(None, '[],')
-        #floats = [float(s) for s in item.split()]
         floats = item
         rightPalmData.append(floats)
 
     fingerData = []
     for item in rawFingerData:
-        #item = item.translate(None, '[],')
-        #itemArray = [float(s) for s in item.split(" ")]
         itemArray = item
         i = 1
         temp3 = []
@@ -136,7 +123,6 @@ def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
 
 def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
     featureVectorList = []
-    #print "fingers: {}".format(fingerData)
     for i in range(0, len(leftPalmData)):
         leftPalm = leftPalmData[i]
         rightPalm = rightPalmData[i]
