@@ -49,7 +49,7 @@ class Knn:
     (label_vector, input_vector) = self.__loadData__(self.featureFile)
 
     trainData, testData, trainLabels, testLabels = cross_validation.train_test_split(input_vector, 
-          label_vector, test_size=(1.0-percentSplit), random_state=0)
+          label_vector, test_size=(1.0-percentSplit))
 
     kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
     kNNClassifier.fit(trainData, trainLabels) 
