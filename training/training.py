@@ -105,8 +105,48 @@ class NeuralNetwork:
   def validateModel(self):
     (label_vector, input_vector) = self.__loadData__(self.featureFile)
 
+  def trainMLP(self, featureFile):
+    (label_vector, input_vector) = self.__loadData__(featureFile)
 
-  def train(self, featureFile):
+    percent_split = 0.7
+    trX, teX, trY, teY = cross_validation.train_test_split(input_vector, 
+              label_vector, test_size=(1.0-percent_split), random_state=0)
+
+    n_inputs = 10
+    n_outputs = 8
+
+    X = tf.placeholder("float", [None, n_inputs])
+    Y = tf.placeholder("float", [None, n_outputs])
+
+    w_h = tf.Variable(tf.random_normal([n_inputs, 10], stddev=0.01))
+    w_o = tf.Variable(tf.random_normal([10, n_outputs], stddev=0.01))
+
+    p_keep_input = tf.placeholder("float")
+    p_keep_hidden = tf.placeholder("float")
+    X = tf.nn.dropout(X, p_keep_input)
+    h = tf.nn.relu(tf.matmul(X, w_h))
+    h = tf.nn.dropout(h, p_keep_hidden)
+    py_x = tf.matmul(h, w_o)
+
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(py_x, Y))
+    train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
+    #train_op = tf.train.GradientDescentOptimizer(0.001).minimize(cost)
+
+    predict_op = tf.argmax(py_x, 1)
+      
+    with tf.Session() as sess:
+
+        tf.initialize_all_variables().run()
+
+        for i in range(10000):
+            sess.run(train_op, feed_dict={X: trX, Y: trY,
+                                              p_keep_input: 0.8, p_keep_hidden: 0.5})
+            if (i % 250 == 0):
+              print(i, np.mean(np.argmax(teY, axis=1) == sess.run(predict_op, feed_dict={X: teX, Y: teY,
+                                                             p_keep_input: 1.0,
+                                                             p_keep_hidden: 1.0})))
+
+  def trainSoftmax(self, featureFile):
     self.featureFile = featureFile
     (label_vector, input_vector) = self.__loadData__(featureFile)
     # Build computation graph by creating nodes for input images and target output classes
@@ -136,8 +176,6 @@ class NeuralNetwork:
 
     #Train using gradient descent
     train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
-
-
 
     # Add accuracy checking nodes
     tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
@@ -183,90 +221,3 @@ class NeuralNetwork:
 
     #saver.restore(sess, "model.ckpt")
     #print("Model restored.")
-
-
-
-
-
-'''
-def train_nn(inputData, outputData):
-  # Build computation graph by creating nodes for input images and target output classes
-  # 10 elements input
-  # 8 output classes
-
-  # Network input 
-  x = tf.placeholder(tf.float32, [None, 10])
-
-  # Network weights
-  W = tf.Variable(tf.zeros([10, 8]))
-
-  # Network bias
-  b = tf.Variable(tf.zeros([8]))
-
-  # Regression model implementation
-  y = tf.nn.softmax(tf.matmul(x, W) + b)
-
-  # To implement cross-entropy, a new placeholder is needed to input the correct answers
-  y_ = tf.placeholder(tf.float32, [None, 8])
-
-  # Cost function
-  cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
-
-  # Train the model
-  learnRate = 0.9
-
-  #Train using gradient descent
-  train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
-
-  #Train using RMSProp#
-  #train_step = tf.train.RMSPropOptimizer(learnRate, decay=0.9, momentum=0.0, epsilon=1e-10, use_locking=False, name='RMSProp')
-
-  #Train using AdamOptimizer#
-  #train_step = tf.train.AdamOptimizer(learnRate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-08, use_locking=False, name='Adam')
-
-  # Add accuracy checking nodes
-  tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
-  tf_accuracy = tf.reduce_mean(tf.cast(tf_correct_prediction, "float"))
-
-  # Init variables
-  init = tf.initialize_all_variables()
-
-  sess = tf.Session()
-  sess.run(init)
-
-  # Run each training operation with 1000 training examples
-  k=[]
-  saved=0
-  for i in range(350):
-    #sess.run(train_step, feed_dict={x: x_train, y_: y_train})
-    #result = sess.run(tf_accuracy, feed_dict={x: x_test, y_: y_test})
-    sess.run(train_step, feed_dict={x: inputData, y_: outputData})
-    result = sess.run(tf_accuracy, feed_dict={x: inputData, y_: outputData})
-    if (i % 25 == 0):
-      print("Run {},{}".format(i,result))
-    k.append(result)
-
-  # Evaluate model
-  correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
-  accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-
-  k=np.array(k)
-  print(np.where(k==k.max()))
-  print("Max accuracy: {}".format(k.max()))
-  print(' ')
-  print('NN training Validation :: Done.\n')
-
-
-
-
-label_vector = []
-for n in range(0,len(label_vector_strings)):
-  index = dict[label_vector_strings[n]]
-  label_array_representation = [0, 0, 0, 0, 0, 0, 0, 0]
-  label_array_representation[index] = 1
-  label_vector.append(label_array_representation)
-
-train_nn(input_vector, label_vector)
-
-#train_splitval(input_vector, label_vector_strings)
-'''
