@@ -15,7 +15,7 @@ import matplotlib.colors as clr
 
 
 DICT = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
-COLOR_MAP = {'INIT': 'olivedrab', 'ALCOHOL': 'purple', 'NON-ALCOHOL': 'black', 'FOOD': 'tomato', 'UNDO': 'orange', 'CHECKOUT': 'maroon', 'CASH': 'blue', 'CREDIT': 'royalblue'}
+COLOR_MAP = {'INIT': 'olivedrab', 'ALCOHOL': 'gold', 'NON-ALCOHOL': 'black', 'FOOD': 'tomato', 'UNDO': 'orange', 'CHECKOUT': 'red', 'CASH': 'magenta', 'CREDIT': 'royalblue'}
 
 
 
@@ -30,6 +30,7 @@ class Knn:
   featureFile = ''
   trainedModel = None
   n_neighbors = 2
+  percentSplit = 0.7
 
   def train(self, featureFile):
     self.featureFile = featureFile
@@ -63,11 +64,10 @@ class Knn:
     print('Split Validation training :: Done.\n')
 
   def splitValidateModel(self):
-    percentSplit = 0.7
     (label_vector, input_vector) = loadData(self.featureFile)
 
     trainData, testData, trainLabels, testLabels = cross_validation.train_test_split(input_vector, 
-          label_vector, test_size=(1.0-percentSplit))
+          label_vector, test_size=(1.0 - self.percentSplit))
 
     kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
     kNNClassifier.fit(trainData, trainLabels) 
@@ -106,6 +106,44 @@ class Knn:
     else:
       plt.savefig(fileName)
       print "Plot saved as " + fileName + ".png"
+
+
+  def visualizePredictedDataset(self, fileName = ''):
+    (label_vector, input_vector) = loadData(self.featureFile)
+    indexArray = range(0, len(input_vector))
+
+    trainData, testData, trainLabels, expectedLabels, trainIndices, testIndices = \
+      cross_validation.train_test_split(input_vector, label_vector, indexArray, test_size=(1.0 - self.percentSplit))
+    
+    kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
+    kNNClassifier.fit(trainData, trainLabels) 
+    predictedLabels = kNNClassifier.predict(testData)
+
+    pca = PCA(n_components = 2)
+    X_trans = pca.fit_transform(input_vector)
+
+    plt.figure()
+    colorArray = []
+
+    print("----- Wrong predictions -----")
+    for n in range(0, len(input_vector)):
+      if n in testIndices:
+        if predictedLabels[testIndices.index(n)] != expectedLabels[testIndices.index(n)]:
+          colorArray.append(COLOR_MAP[predictedLabels[testIndices.index(n)]])
+          print("Expected", expectedLabels[testIndices.index(n)], 
+                    "Predicted", predictedLabels[testIndices.index(n)])
+        else:
+          colorArray.append('yellow')
+      else:
+        colorArray.append('white')
+
+    plt.scatter(X_trans[:,0], X_trans[:,1], c = colorArray)
+    if fileName == '':
+      plt.show()
+    else:
+      plt.savefig(fileName)
+      print "Plot saved as " + fileName + ".png"
+
 
 
 ''' NEURAL NETWORK '''
