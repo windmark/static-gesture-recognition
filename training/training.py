@@ -5,12 +5,25 @@ from numpy import genfromtxt
 
 import sklearn
 from sklearn import cross_validation, datasets, neighbors, metrics
+from sklearn.decomposition import PCA
 from sklearn.cross_validation import train_test_split
 from sklearn.externals import joblib
 
+import matplotlib.pyplot as plt
+import matplotlib.colors as clr
 
 
-dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
+
+DICT = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
+COLOR_MAP = {'INIT': 'olivedrab', 'ALCOHOL': 'purple', 'NON-ALCOHOL': 'black', 'FOOD': 'tomato', 'UNDO': 'orange', 'CHECKOUT': 'maroon', 'CASH': 'blue', 'CREDIT': 'royalblue'}
+
+
+
+def loadData(featureFile):
+  label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
+  input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
+  return (label_vector, input_vector)
+
 
 ''' KNN CLASS '''
 class Knn:
@@ -18,14 +31,9 @@ class Knn:
   trainedModel = None
   n_neighbors = 2
 
-  def __loadData__(self, featureFile):
-    label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
-    input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
-    return (label_vector, input_vector)
-
   def train(self, featureFile):
     self.featureFile = featureFile
-    (label_vector, input_vector) = self.__loadData__(featureFile)
+    (label_vector, input_vector) = loadData(featureFile)
 
     kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
     kNNClassifier.fit(input_vector, label_vector)
@@ -34,7 +42,7 @@ class Knn:
 
   def classify(self, featureVector):
     predicted = self.trainedModel.predict(np.array(featureVector).reshape(1,-1))
-    label = dict[predicted[0]]
+    label = DICT[predicted[0]]
     return label
 
   def saveModel(self, file):
@@ -44,8 +52,8 @@ class Knn:
     self.trainedModel = joblib.load(file)
 
   def externalValidateModel(self, separateFeatureFile):
-    (label_vector, input_vector) = self.__loadData__(self.featureFile)    
-    (test_label_vector, test_input_vector) = self.__loadData__(separateFeatureFile)
+    (label_vector, input_vector) = loadData(self.featureFile)    
+    (test_label_vector, test_input_vector) = loadData(separateFeatureFile)
 
     predictedLabels = self.trainedModel.predict(test_input_vector)
 
@@ -54,12 +62,9 @@ class Knn:
     print("Confusion matrix:\n%s" % metrics.confusion_matrix(test_label_vector, predictedLabels))
     print('Split Validation training :: Done.\n')
 
-
-
   def splitValidateModel(self):
     percentSplit = 0.7
-
-    (label_vector, input_vector) = self.__loadData__(self.featureFile)
+    (label_vector, input_vector) = loadData(self.featureFile)
 
     trainData, testData, trainLabels, testLabels = cross_validation.train_test_split(input_vector, 
           label_vector, test_size=(1.0-percentSplit))
@@ -74,7 +79,7 @@ class Knn:
     print('Split Validation training :: Done.\n')
 
   def crossValidateModel(self):
-    (label_vector, input_vector) = self.__loadData__(self.featureFile)
+    (label_vector, input_vector) = loadData(self.featureFile)
     kFold = 5
 
     kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
@@ -84,22 +89,36 @@ class Knn:
     print(scores)
     print("Average: ", sum(scores) / len(scores))
 
+  def visualizeData(self, fileName = ''):
+    (label_vector, input_vector) = loadData(self.featureFile)
+
+    pca = PCA(n_components = 2)
+    X_trans = pca.fit_transform(input_vector)
+
+    plt.figure()
+    colorArray = []
+    for n in range(0, len(input_vector)):
+      colorArray.append(COLOR_MAP[label_vector[n]])
+
+    plt.scatter(X_trans[:,0], X_trans[:,1], c = colorArray)
+    if fileName == '':
+      plt.show()
+    else:
+      plt.savefig(fileName)
+      print "Plot saved as " + fileName + ".png"
 
 
 ''' NEURAL NETWORK '''
 class NeuralNetwork:
-
   trainedModel = None
   featureFile = ''
-  dict = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
 
   def __loadData__(self, featureFile):
-    label_vector_strings = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
-    input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
+    (label_vector_strings, input_vector) = loadData(featureFile)
 
     label_vector = []
     for n in range(0,len(label_vector_strings)):
-      index = self.dict[label_vector_strings[n]]
+      index = DICT[label_vector_strings[n]]
       label_array_representation = [0, 0, 0, 0, 0, 0, 0, 0]
       label_array_representation[index] = 1
       label_vector.append(label_array_representation)
