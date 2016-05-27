@@ -63,6 +63,7 @@ class Knn:
     print("Confusion matrix:\n%s" % metrics.confusion_matrix(test_label_vector, predictedLabels))
     print('Split Validation training :: Done.\n')
 
+
   def splitValidateModel(self):
     (label_vector, input_vector) = loadData(self.featureFile)
 
@@ -78,6 +79,7 @@ class Knn:
     print("Confusion matrix:\n%s" % metrics.confusion_matrix(testLabels, predictedLabels))
     print('Split Validation training :: Done.\n')
 
+
   def crossValidateModel(self):
     (label_vector, input_vector) = loadData(self.featureFile)
     kFold = 5
@@ -89,8 +91,12 @@ class Knn:
     print(scores)
     print("Average: ", sum(scores) / len(scores))
 
-  def visualizeData(self, fileName = ''):
-    (label_vector, input_vector) = loadData(self.featureFile)
+
+  def visualizeData(self, featureData = '', fileName = ''):
+    if featureData == '':
+      (label_vector, input_vector) = loadData(self.featureFile)
+    else:
+      (label_vector, input_vector) = loadData(featureData)
 
     pca = PCA(n_components = 2)
     X_trans = pca.fit_transform(input_vector)
@@ -108,8 +114,11 @@ class Knn:
       print "Plot saved as " + fileName + ".png"
 
 
-  def visualizePredictedDataset(self, fileName = ''):
-    (label_vector, input_vector) = loadData(self.featureFile)
+  def visualizePredictedDataset(self, featureData = '', fileName = ''):
+    if featureData == '':
+      (label_vector, input_vector) = loadData(self.featureFile)
+    else:
+      (label_vector, input_vector) = loadData(featureData)
     indexArray = range(0, len(input_vector))
 
     trainData, testData, trainLabels, expectedLabels, trainIndices, testIndices = \

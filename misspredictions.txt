@@ -29,18 +29,23 @@ Split Validation training :: Done.
 ('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
 ('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
 ('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
-('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
-('Expected', 'INIT', 'Predicted', 'CREDIT')
 ('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
+('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
+('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
+('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
+('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
+
 ('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
 ('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
 ('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
-('Expected', 'INIT', 'Predicted', 'CHECKOUT')
+('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
+
+('Expected', 'CASH', 'Predicted', 'CREDIT')
+('Expected', 'CASH', 'Predicted', 'CREDIT')
 ('Expected', 'CASH', 'Predicted', 'UNDO')
+
+('Expected', 'INIT', 'Predicted', 'CREDIT')
+('Expected', 'INIT', 'Predicted', 'CHECKOUT')
+
 ('Expected', 'FOOD', 'Predicted', 'NON-ALCOHOL')
-('Expected', 'CASH', 'Predicted', 'CREDIT')
-('Expected', 'CASH', 'Predicted', 'CREDIT')
-('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
-('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
-('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
-('Expected', 'CHECKOUT', 'Predicted', 'CREDIT')
+
