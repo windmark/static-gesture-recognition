@@ -40,16 +40,14 @@ Normalizes and rounds to five decimals
 def normalize(array):
     normalizedData = []
     for n in range(0,2):
-        try:
-            for a in range(5):
-                tmp = array[a]
-                minval = min(array[n*5:(n+1)*5])
-                maxval= max(array[n*5:(n+1)*5])
+        minval = min(array[n*5:(n+1)*5])
+        maxval= max(array[n*5:(n+1)*5])
 
-                #rounding to 5 decimals
-                normalizedData.append(round((tmp - minval) / (maxval - minval),5))
-        except:
-            pass
+        for a in range(n * 5, (n+1) * 5):
+            tmp = array[a]
+            #rounding to 5 decimals
+            normalizedData.append(round((tmp - minval) / (maxval - minval),5))
+        
     return normalizedData
 
 '''

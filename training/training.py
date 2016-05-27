@@ -138,11 +138,12 @@ class Knn:
     for n in range(0, len(input_vector)):
       if n in testIndices:
         if predictedLabels[testIndices.index(n)] != expectedLabels[testIndices.index(n)]:
-          colorArray.append(COLOR_MAP[predictedLabels[testIndices.index(n)]])
+          #colorArray.append(COLOR_MAP[predictedLabels[testIndices.index(n)]])
+          colorArray.append('red')
           print("Expected", expectedLabels[testIndices.index(n)], 
                     "Predicted", predictedLabels[testIndices.index(n)])
         else:
-          colorArray.append('yellow')
+          colorArray.append('olivedrab')
       else:
         colorArray.append('white')
 
