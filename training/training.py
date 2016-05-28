@@ -154,6 +154,22 @@ class Knn:
       plt.savefig(fileName)
       print "Plot saved as " + fileName + ".png"
 
+  def trainLimited(self, featureFile, n_datapoints):
+    (label_vector, input_vector) = loadData(featureFile)
+
+    trainData, testData, trainLabels, testLabels = \
+      cross_validation.train_test_split(input_vector, label_vector, test_size=(0))
+
+    n_totalrows = int((len(label_vector)/n_datapoints))
+    for n in range(0, n_totalrows):
+      limited_label_vector = trainLabels[0: (n+1) * n_datapoints]
+      limited_input_vector = trainData[0: (n+1) * n_datapoints]
+
+      kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
+      kNNClassifier.fit(limited_input_vector, limited_label_vector)
+
+      scores = cross_validation.cross_val_score(kNNClassifier, limited_input_vector, limited_label_vector, cv = 5)
+      print '%f on %d datapoints' % ((sum(scores) / len(scores)), len(limited_label_vector))
 
 
 ''' NEURAL NETWORK '''
@@ -186,8 +202,11 @@ class NeuralNetwork:
     (label_vector, input_vector) = self.__loadData__(self.featureFile)
 
   def trainMLP(self, featureFile):
+    self.featureFile = featureFile
     (label_vector, input_vector) = self.__loadData__(featureFile)
+    self.trainMLPWithData(input_vector, label_vector)
 
+  def trainMLPWithData(self, input_vector, label_vector, printSteps = 250):
     percent_split = 0.7
     trX, teX, trY, teY = cross_validation.train_test_split(input_vector, 
               label_vector, test_size=(1.0-percent_split), random_state=0)
@@ -209,26 +228,67 @@ class NeuralNetwork:
     py_x = tf.matmul(h, w_o)
 
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(py_x, Y))
-    train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
-    #train_op = tf.train.GradientDescentOptimizer(0.001).minimize(cost)
+    train_step = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
+    #train_step = tf.train.GradientDescentOptimizer(0.001).minimize(cost)
 
-    predict_op = tf.argmax(py_x, 1)
-      
-    with tf.Session() as sess:
+    # Add accuracy checking nodes
+    tf_correct_prediction = tf.equal(tf.argmax(py_x,1), tf.argmax(teY,1))
+    tf_accuracy = tf.reduce_mean(tf.cast(tf_correct_prediction, "float"))
 
-        tf.initialize_all_variables().run()
+    # Init variables
+    init = tf.initialize_all_variables()
 
-        for i in range(10000):
-            sess.run(train_op, feed_dict={X: trX, Y: trY,
-                                              p_keep_input: 0.8, p_keep_hidden: 0.5})
-            if (i % 250 == 0):
-              print(i, np.mean(np.argmax(teY, axis=1) == sess.run(predict_op, feed_dict={X: teX, Y: teY,
-                                                             p_keep_input: 1.0,
-                                                             p_keep_hidden: 1.0})))
+    sess = tf.Session()
+    sess.run(init)
 
-  def trainSoftmax(self, featureFile):
+    k=[]
+    for i in range(10000):
+        sess.run(train_step, feed_dict={X: trX, Y: trY, p_keep_input: 0.8, p_keep_hidden: 0.5})
+        result = sess.run(tf_accuracy, feed_dict={X: teX, Y: teY, p_keep_input: 1.0, p_keep_hidden: 1.0})
+        k.append(result)
+        if (i % printSteps == 0):
+          print("Run {},{}".format(i,result))
+
+    k=np.array(k)
+    print("Max accuracy: {}".format(k.max()))
+    print(('MLP training with %s datapoints :: Done \n\n') % (len(input_vector)))
+
+    self.trainedModel = sess
+    return (self.trainedModel, k.max())
+
+  def trainLimitedMLP(self, featureFile, n_datapoints):
+    (label_vector, input_vector) = self.__loadData__(featureFile)
+
+    n_totalrows = int((len(label_vector)/n_datapoints))
+    k=[]
+    for n in range(0, n_totalrows):
+      trainData, testData, trainLabels, testLabels = \
+        cross_validation.train_test_split(input_vector, label_vector, test_size=(0.2))
+
+      limited_label_vector = trainLabels[0: (n+1) * n_datapoints]
+      limited_input_vector = trainData[0: (n+1) * n_datapoints]
+
+      average = []
+      for a in range(0,5):
+        _, maxVal = self.trainMLPWithData(limited_input_vector, limited_label_vector, 1000)
+        average.append(maxVal)
+
+      averageMaxVal = sum(average) / len(average)
+      print 'Total Average Value: %s \n\n' % (averageMaxVal)
+      average = []
+      k.append(averageMaxVal)
+
+    print('Limited MLP training result -------------')
+    for i in range (0,len(k)):
+        print '%f on %d datapoints' % (k[i], n_datapoints * (i+1))
+    print '------------------------------------------'
+
+  def trainSoftmax(self, featureFile, n_datapoints):
     self.featureFile = featureFile
     (label_vector, input_vector) = self.__loadData__(featureFile)
+    self.trainSoftmaxWithData(input_vector, label_vector)
+
+  def trainSoftmaxWithData(self, input_vector, label_vector, printSteps = 250):
     # Build computation graph by creating nodes for input images and target output classes
     n_inputs = 10
     n_outputs = 8
@@ -255,7 +315,9 @@ class NeuralNetwork:
     learnRate = 0.01
 
     #Train using gradient descent
-    train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
+    #train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
+    train_step = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cross_entropy)
+
 
     # Add accuracy checking nodes
     tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
@@ -267,37 +329,53 @@ class NeuralNetwork:
     sess = tf.Session()
     sess.run(init)
 
-    # Add ops to save and restore all the variables.
-    #saver = tf.train.Saver()
+    percent_split = 0.7
+    trX, teX, trY, teY = cross_validation.train_test_split(input_vector, 
+              label_vector, test_size=(1.0-percent_split), random_state=0)
 
     # Run each training operation with 1000 training examples
     k=[]
-    saved=0
     for i in range(10000):
-      #sess.run(train_step, feed_dict={x: x_train, y_: y_train})
-      #result = sess.run(tf_accuracy, feed_dict={x: x_test, y_: y_test})
-      sess.run(train_step, feed_dict={x: input_vector, y_: label_vector})
-      result = sess.run(tf_accuracy, feed_dict={x: input_vector, y_: label_vector})
-      if (i % 25 == 0):
-        print("Run {},{}".format(i,result))
+      sess.run(train_step, feed_dict={x: trX, y_: trY})
+      result = sess.run(tf_accuracy, feed_dict={x: teX, y_: teY})
       k.append(result)
+      if (i % printSteps == 0):
+        print("Run {},{}".format(i,result))
 
     # Evaluate model
     correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
     k=np.array(k)
-    print(np.where(k==k.max()))
-    #sess.saveModele.save(sess, 'my-model', global_step=0)
-    #save_path = saver.save(sess, "model.ckpt")
-    #print("Model saved in file: %s" % save_path)
     print("Max accuracy: {}".format(k.max()))
-    print(' ')
-    print('NN training Validation :: Done.\n')
-    print ' '
+    print(('Softmax training with %s datapoints :: Done \n\n') % (len(input_vector)))
 
     self.trainedModel = sess
-    return self.trainedModel
+    return (self.trainedModel, k.max())
 
-    #saver.restore(sess, "model.ckpt")
-    #print("Model restored.")
+  def trainLimitedSoftmax(self, featureFile, n_datapoints):
+    (label_vector, input_vector) = self.__loadData__(featureFile)
+
+    n_totalrows = int((len(label_vector)/n_datapoints))
+    k=[]
+    for n in range(0, n_totalrows):
+      trainData, testData, trainLabels, testLabels = \
+        cross_validation.train_test_split(input_vector, label_vector, test_size=(0.2))
+
+      limited_label_vector = trainLabels[0: (n+1) * n_datapoints]
+      limited_input_vector = trainData[0: (n+1) * n_datapoints]
+
+      average = []
+      for a in range(0,5):
+        _, maxVal = self.trainSoftmaxWithData(limited_input_vector, limited_label_vector, 1000)
+        average.append(maxVal)
+
+      averageMaxVal = sum(average) / len(average)
+      print 'Total Average Value: %s \n\n' % (averageMaxVal)
+      average = []
+      k.append(averageMaxVal)
+
+    print('Limited Softmax training result ----------')
+    for i in range (0,len(k)):
+      print '%f on %d datapoints' % (k[i], (n_datapoints * (i+1)))
+    print '------------------------------------------'
