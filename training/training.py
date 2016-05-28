@@ -64,20 +64,25 @@ class Knn:
     print('Split Validation training :: Done.\n')
 
 
-  def splitValidateModel(self):
+  def splitValidateModel(self, visualizePredictions = False):
     (label_vector, input_vector) = loadData(self.featureFile)
 
-    trainData, testData, trainLabels, testLabels = cross_validation.train_test_split(input_vector, 
-          label_vector, test_size=(1.0 - self.percentSplit))
+
+    indexArray = range(0, len(input_vector))
+    trainData, testData, trainLabels, expectedLabels, trainIndices, testIndices = \
+      cross_validation.train_test_split(input_vector, label_vector, indexArray, test_size=(1.0 - self.percentSplit))
 
     kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
     kNNClassifier.fit(trainData, trainLabels) 
     predictedLabels = kNNClassifier.predict(testData)
     
     print("Classification report for classifier %s:\n%s\n"
-          % ('k-NearestNeighbour', metrics.classification_report(testLabels, predictedLabels)))
-    print("Confusion matrix:\n%s" % metrics.confusion_matrix(testLabels, predictedLabels))
+          % ('k-NearestNeighbour', metrics.classification_report(expectedLabels, predictedLabels)))
+    print("Confusion matrix:\n%s" % metrics.confusion_matrix(expectedLabels, predictedLabels))
     print('Split Validation training :: Done.\n')
+
+    if visualizePredictions:
+      self.visualizePredictedDataset(input_vector, testIndices, predictedLabels, expectedLabels)
 
 
   def crossValidateModel(self):
@@ -114,28 +119,19 @@ class Knn:
       print "Plot saved as " + fileName + ".png"
 
 
-  def visualizePredictedDataset(self, featureData = '', fileName = ''):
-    if featureData == '':
-      (label_vector, input_vector) = loadData(self.featureFile)
-    else:
-      (label_vector, input_vector) = loadData(featureData)
-    indexArray = range(0, len(input_vector))
-
-    trainData, testData, trainLabels, expectedLabels, trainIndices, testIndices = \
-      cross_validation.train_test_split(input_vector, label_vector, indexArray, test_size=(1.0 - self.percentSplit))
-    
-    kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
-    kNNClassifier.fit(trainData, trainLabels) 
-    predictedLabels = kNNClassifier.predict(testData)
+  def visualizePredictedDataset(self, data, testIndices, predictedLabels, expectedLabels):
+    #kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
+    #kNNClassifier.fit(trainData, trainLabels)
+    #predictedLabels = kNNClassifier.predict(testData)
 
     pca = PCA(n_components = 2)
-    X_trans = pca.fit_transform(input_vector)
+    X_trans = pca.fit_transform(data)
 
     plt.figure()
     colorArray = []
 
     print("----- Wrong predictions -----")
-    for n in range(0, len(input_vector)):
+    for n in range(0, len(data)):
       if n in testIndices:
         if predictedLabels[testIndices.index(n)] != expectedLabels[testIndices.index(n)]:
           #colorArray.append(COLOR_MAP[predictedLabels[testIndices.index(n)]])
@@ -148,11 +144,7 @@ class Knn:
         colorArray.append('white')
 
     plt.scatter(X_trans[:,0], X_trans[:,1], c = colorArray)
-    if fileName == '':
-      plt.show()
-    else:
-      plt.savefig(fileName)
-      print "Plot saved as " + fileName + ".png"
+    plt.show()
 
 
 
