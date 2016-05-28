@@ -30,18 +30,28 @@ Split Validation training :: Done.
 ----- k-fold Cross Validation -----
 [ 0.91666667  0.74766355  0.85046729  0.85576923  0.84313725]
 ('Average: ', 0.84274079869187069)
+
 ----- Wrong predictions -----
-('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
-('Expected', 'NON-ALCOHOL', 'Predicted', 'CASH')
-('Expected', 'CREDIT', 'Predicted', 'INIT')
 ('Expected', 'CASH', 'Predicted', 'INIT')
 ('Expected', 'CASH', 'Predicted', 'INIT')
 ('Expected', 'CASH', 'Predicted', 'INIT')
 ('Expected', 'CASH', 'Predicted', 'ALCOHOL')
+
+('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
 ('Expected', 'UNDO', 'Predicted', 'CREDIT')
-('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
-('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
 ('Expected', 'UNDO', 'Predicted', 'CASH')
+
+('Expected', 'CREDIT', 'Predicted', 'INIT')
+('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
+('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
+
+('Expected', 'NON-ALCOHOL', 'Predicted', 'CASH')
+
+
+
+
+
+
 
 
 
