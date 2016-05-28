@@ -1,38 +1,79 @@
+
+
 Classification report for classifier k-NearestNeighbour:
              precision    recall  f1-score   support
 
-    ALCOHOL       1.00      1.00      1.00        24
-       CASH       0.89      0.94      0.91        17
-   CHECKOUT       0.88      0.88      0.88        17
-     CREDIT       1.00      0.96      0.98        25
+    ALCOHOL       0.89      1.00      0.94        17
+       CASH       1.00      0.80      0.89        20
+   CHECKOUT       0.85      0.94      0.89        18
+     CREDIT       0.96      0.96      0.96        28
        FOOD       1.00      1.00      1.00        21
-       INIT       0.94      0.94      0.94        17
-NON-ALCOHOL       1.00      0.94      0.97        17
-       UNDO       0.86      0.90      0.88        21
+       INIT       0.95      1.00      0.98        20
+NON-ALCOHOL       1.00      1.00      1.00        19
+       UNDO       0.87      0.81      0.84        16
 
-avg / total       0.95      0.95      0.95       159
+avg / total       0.95      0.94      0.94       159
 
 
 Confusion matrix:
-[[24  0  0  0  0  0  0  0]
- [ 0 16  0  0  0  0  0  1]
- [ 0  0 15  0  0  0  0  2]
- [ 0  0  0 24  0  1  0  0]
+[[17  0  0  0  0  0  0  0]
+ [ 2 16  0  1  0  0  0  1]
+ [ 0  0 17  0  0  0  0  1]
+ [ 0  0  0 27  0  1  0  0]
  [ 0  0  0  0 21  0  0  0]
- [ 0  0  1  0  0 16  0  0]
- [ 0  1  0  0  0  0 16  0]
- [ 0  1  1  0  0  0  0 19]]
+ [ 0  0  0  0  0 20  0  0]
+ [ 0  0  0  0  0  0 19  0]
+ [ 0  0  3  0  0  0  0 13]]
 Split Validation training :: Done.
 
 
 ----- k-fold Cross Validation -----
 [ 0.91666667  0.74766355  0.85046729  0.85576923  0.84313725]
 ('Average: ', 0.84274079869187069)
-
 ----- Wrong predictions -----
-('Expected', 'INIT', 'Predicted', 'CHECKOUT')
-('Expected', 'CHECKOUT', 'Predicted', 'UNDO')
+('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
+('Expected', 'NON-ALCOHOL', 'Predicted', 'CASH')
 ('Expected', 'CREDIT', 'Predicted', 'INIT')
-('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
-('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
-('Expected', 'CREDIT', 'Predicted', 'FOOD')
+('Expected', 'CASH', 'Predicted', 'INIT')
+('Expected', 'CASH', 'Predicted', 'INIT')
+('Expected', 'CASH', 'Predicted', 'INIT')
+('Expected', 'CASH', 'Predicted', 'ALCOHOL')
+('Expected', 'UNDO', 'Predicted', 'CREDIT')
+('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
+('Expected', 'CREDIT', 'Predicted', 'CHECKOUT')
+('Expected', 'UNDO', 'Predicted', 'CASH')
+
+
+
+
+
+
+------------------------------------------
+SINGLE INDIVIDUAL
+
+
+Classification report for classifier k-NearestNeighbour:
+             precision    recall  f1-score   support
+
+    ALCOHOL       1.00      1.00      1.00         5
+       CASH       1.00      1.00      1.00         5
+   CHECKOUT       0.83      1.00      0.91         5
+     CREDIT       1.00      1.00      1.00         5
+       FOOD       1.00      1.00      1.00         5
+       INIT       1.00      1.00      1.00         5
+NON-ALCOHOL       1.00      1.00      1.00         5
+       UNDO       1.00      0.80      0.89         5
+
+avg / total       0.98      0.97      0.97        40
+
+
+Confusion matrix:
+[[5 0 0 0 0 0 0 0]
+ [0 5 0 0 0 0 0 0]
+ [0 0 5 0 0 0 0 0]
+ [0 0 0 5 0 0 0 0]
+ [0 0 0 0 5 0 0 0]
+ [0 0 0 0 0 5 0 0]
+ [0 0 0 0 0 0 5 0]
+ [0 0 1 0 0 0 0 4]]
+Split Validation training :: Done.
