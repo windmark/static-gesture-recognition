@@ -15,10 +15,13 @@ import matplotlib.colors as clr
 
 
 DICT = {'INIT': 0, 'ALCOHOL': 1, 'NON-ALCOHOL': 2, 'FOOD': 3, 'UNDO': 4, 'CHECKOUT': 5, 'CASH': 6, 'CREDIT': 7}
-COLOR_MAP = {'INIT': 'olivedrab', 'ALCOHOL': 'gold', 'NON-ALCOHOL': 'black', 'FOOD': 'tomato', 'UNDO': 'orange', 'CHECKOUT': 'red', 'CASH': 'magenta', 'CREDIT': 'royalblue'}
+COLOR_MAP = {'INIT': 'olivedrab', 'ALCOHOL': 'gold', 'NON-ALCOHOL': 'black', 'FOOD': 'tomato', \
+            'UNDO': 'orange', 'CHECKOUT': 'red', 'CASH': 'magenta', 'CREDIT': 'royalblue'}
 
 
-
+'''
+Reads the data of featureFile, expecting a format of labels and input data.
+'''
 def loadData(featureFile):
   label_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = (0,), dtype = str)
   input_vector = np.loadtxt(featureFile, delimiter = ', ', usecols = range(1,11), dtype = float)
@@ -32,6 +35,9 @@ class Knn:
   n_neighbors = 2
   percentSplit = 0.7
 
+  '''
+  Trains the model based on the given featureFile and sets it as the new model of the class. 
+  '''
   def train(self, featureFile):
     self.featureFile = featureFile
     (label_vector, input_vector) = loadData(featureFile)
@@ -41,17 +47,29 @@ class Knn:
     self.trainedModel = kNNClassifier
     return self.trainedModel
 
+  '''
+  Classifies a given feature vector and returns the label.
+  '''
   def classify(self, featureVector):
     predicted = self.trainedModel.predict(np.array(featureVector).reshape(1,-1))
     label = DICT[predicted[0]]
     return label
 
+  '''
+  Saves the current model to file.
+  '''
   def saveModel(self, file):
     joblib.dump(self.trainedModel, file)
 
+  '''
+  Loads the model in file and sets it as the new model of the class.
+  '''
   def loadModel(self, file):
     self.trainedModel = joblib.load(file)
 
+  '''
+  Validate the model based on external data, that has not been trained on.
+  '''
   def externalValidateModel(self, separateFeatureFile):
     (label_vector, input_vector) = loadData(self.featureFile)    
     (test_label_vector, test_input_vector) = loadData(separateFeatureFile)
@@ -63,10 +81,11 @@ class Knn:
     print("Confusion matrix:\n%s" % metrics.confusion_matrix(test_label_vector, predictedLabels))
     print('Split Validation training :: Done.\n')
 
-
+  '''
+  Performs split validation on the model. Call with visualizePredictions=True to plot the predictions.
+  '''
   def splitValidateModel(self, visualizePredictions = False):
     (label_vector, input_vector) = loadData(self.featureFile)
-
 
     indexArray = range(0, len(input_vector))
     trainData, testData, trainLabels, expectedLabels, trainIndices, testIndices = \
@@ -82,9 +101,11 @@ class Knn:
     print('Split Validation training :: Done.\n')
 
     if visualizePredictions:
-      self.visualizePredictedDataset(input_vector, testIndices, predictedLabels, expectedLabels)
+      self.__visualizePredictedDataset__(input_vector, testIndices, predictedLabels, expectedLabels)
 
-
+  '''
+  Perform cross validatation on the model.
+  '''  
   def crossValidateModel(self):
     (label_vector, input_vector) = loadData(self.featureFile)
     kFold = 5
@@ -96,7 +117,10 @@ class Knn:
     print(scores)
     print("Average: ", sum(scores) / len(scores))
 
-
+  '''
+  Visualize the dataset. Plot new features by calling with specific featureData file,
+  and save it to an image file by specifying fileName.
+  '''
   def visualizeData(self, featureData = '', fileName = ''):
     if featureData == '':
       (label_vector, input_vector) = loadData(self.featureFile)
@@ -118,12 +142,10 @@ class Knn:
       plt.savefig(fileName)
       print "Plot saved as " + fileName + ".png"
 
-
-  def visualizePredictedDataset(self, data, testIndices, predictedLabels, expectedLabels):
-    #kNNClassifier = neighbors.KNeighborsClassifier(self.n_neighbors, weights='distance')
-    #kNNClassifier.fit(trainData, trainLabels)
-    #predictedLabels = kNNClassifier.predict(testData)
-
+  '''
+  Visualized the predicted dataset, based on results from a split validation.
+  '''
+  def __visualizePredictedDataset__(self, data, testIndices, predictedLabels, expectedLabels):
     pca = PCA(n_components = 2)
     X_trans = pca.fit_transform(data)
 
@@ -134,7 +156,6 @@ class Knn:
     for n in range(0, len(data)):
       if n in testIndices:
         if predictedLabels[testIndices.index(n)] != expectedLabels[testIndices.index(n)]:
-          #colorArray.append(COLOR_MAP[predictedLabels[testIndices.index(n)]])
           colorArray.append('red')
           print("Expected", expectedLabels[testIndices.index(n)], 
                     "Predicted", predictedLabels[testIndices.index(n)])
@@ -146,6 +167,9 @@ class Knn:
     plt.scatter(X_trans[:,0], X_trans[:,1], c = colorArray)
     plt.show()
 
+  '''
+  Train the model iteratively using sample steps of n_datapoints. 
+  '''
   def trainLimited(self, featureFile, n_datapoints):
     (label_vector, input_vector) = loadData(featureFile)
 
@@ -164,11 +188,18 @@ class Knn:
       print '%f on %d datapoints' % ((sum(scores) / len(scores)), len(limited_label_vector))
 
 
+
+
+
+
 ''' NEURAL NETWORK '''
 class NeuralNetwork:
   trainedModel = None
   featureFile = ''
 
+  '''
+  Reads the data from featureFile and processes it to the right format.
+  '''
   def __loadData__(self, featureFile):
     (label_vector_strings, input_vector) = loadData(featureFile)
 
@@ -180,24 +211,34 @@ class NeuralNetwork:
       label_vector.append(label_array_representation)
     return (label_vector, input_vector)
 
+  '''
+  Saves the current model to file.
+  '''
   def saveModel(self, file):
     saver = tf.train.Saver()
     save_path = saver.save(self.trainedModel, ("%s.ckpt" % file))
     print("Model saved in file: %s" % save_path)
 
+  '''
+  Loads the model in file and sets it as the new model of the class.
+  '''
   def loadModel(self, file):
     saver = tf.train.Saver()
     saver.restore(self.trainedModel, ("%s.ckpt" % file))
     print("Model restored.")
 
-  def validateModel(self):
-    (label_vector, input_vector) = self.__loadData__(self.featureFile)
-
+  '''
+  Trains the MLP model based on the given featureFile and sets it as the new model of the class. 
+  '''
   def trainMLP(self, featureFile):
     self.featureFile = featureFile
     (label_vector, input_vector) = self.__loadData__(featureFile)
     self.trainMLPWithData(input_vector, label_vector)
 
+  '''
+  Trains the MLP model based on the given input data, making it possible to
+  specify the steps between prints.
+  '''
   def trainMLPWithData(self, input_vector, label_vector, printSteps = 250):
     percent_split = 0.7
     trX, teX, trY, teY = cross_validation.train_test_split(input_vector, 
@@ -249,7 +290,10 @@ class NeuralNetwork:
 
     self.trainedModel = sess
     return (self.trainedModel, k.max())
-
+  
+  '''
+  Train the MLP model iteratively using sample steps of n_datapoints. 
+  '''
   def trainLimitedMLP(self, featureFile, n_datapoints):
     (label_vector, input_vector) = self.__loadData__(featureFile)
 
@@ -277,6 +321,9 @@ class NeuralNetwork:
         print '%f on %d datapoints' % (k[i], n_datapoints * (i+1))
     print '------------------------------------------'
 
+  '''
+  Trains the Softmax model based on the given featureFile and sets it as the new model of the class. 
+  '''
   def trainSoftmax(self, featureFile, n_datapoints):
     self.featureFile = featureFile
     (label_vector, input_vector) = self.__loadData__(featureFile)
@@ -347,6 +394,10 @@ class NeuralNetwork:
     self.trainedModel = sess
     return (self.trainedModel, k.max())
 
+  '''
+  Trains the Softmax model based on the given input data, making it possible to
+  specify the steps between prints.
+  '''
   def trainLimitedSoftmax(self, featureFile, n_datapoints):
     (label_vector, input_vector) = self.__loadData__(featureFile)
 

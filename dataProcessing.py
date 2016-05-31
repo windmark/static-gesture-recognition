@@ -16,7 +16,6 @@ def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosit
 
             featureVector.append(euclidianDistance(x,y))
 
-
     if (leftPalmPosition != [] and leftFingerTipPositions != []):
         for n in range(0, len(leftFingerTipPositions)):
             # Extract the distance in each direction
@@ -25,7 +24,6 @@ def calculateDistances(rightPalmPosition, rightFingerTipPositions, leftPalmPosit
 
             # Add the euclidian distance to the feature vector
             featureVector.append(euclidianDistance(x,y))
-
     return featureVector
 
 def euclidian3DDistance(x,y,z):
@@ -92,37 +90,6 @@ def readRawData(file):
     return (leftPalmData, rightPalmData, fingerData, labelData)
 
 
-# TODO: Not used anymore?
-def readRawDataAsArguments(rawLeftPalmData, rawRightPalmData, rawFingerData):
-
-    leftPalmData = []
-    for item in rawLeftPalmData:
-        floats = item
-        leftPalmData.append(floats)
-
-    rightPalmData = []
-    for item in rawRightPalmData:
-        floats = item
-        rightPalmData.append(floats)
-
-    fingerData = []
-    for item in rawFingerData:
-        itemArray = item
-        i = 1
-        temp3 = []
-        temp30 = []
-        for element in itemArray:
-            temp3.append(element)
-            if i % 3 == 0:
-                temp30.append(temp3)
-                temp3 = []
-
-            if i % 30 == 0:
-                fingerData.append(temp30)
-                break
-            i += 1
-    return (leftPalmData, rightPalmData, fingerData)
-
 '''
 Orders data to featureVector format: right palm, right fingers, left palm, left fingers
 Normalizing
@@ -140,8 +107,11 @@ def convertToFeatureVectors(leftPalmData, rightPalmData, fingerData):
     return(featureVectorList)
 
 
-
-# TODO: Not used?
+'''
+Processes the raw data into feature files, which can later be used to train the models.
+It expects featureFileName to be the path to a file where to save processed features,
+based on the file dataFileName.
+'''
 def saveFeatureData(featureFileName, dataFileName):
     (leftPalmData, rightPalmData, fingerData, labelData) = readRawData(dataFileName)
     featureVectorList = convertToFeatureVectors(leftPalmData, rightPalmData, fingerData)
