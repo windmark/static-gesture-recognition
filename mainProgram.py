@@ -43,6 +43,6 @@ def runUI(gesture):
 gs = states.Gstate()
 # Initialize and run K-neares-neighbour
 knn = Knn()
-knn.loadModel('training/knnModel.pkl')
+knn.loadModel('training/models/knnModel.pkl')
 # Run program with gestures from Leap Motion 
 getDataFromLeapMotion()
