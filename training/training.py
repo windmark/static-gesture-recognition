@@ -219,9 +219,10 @@ class NeuralNetwork:
     h = tf.nn.dropout(h, p_keep_hidden)
     py_x = tf.matmul(h, w_o)
 
+    learnRate = 0.01
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(py_x, Y))
     train_step = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
-    #train_step = tf.train.GradientDescentOptimizer(0.001).minimize(cost)
+    #train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cost)
 
     # Add accuracy checking nodes
     tf_correct_prediction = tf.equal(tf.argmax(py_x,1), tf.argmax(teY,1))
@@ -237,6 +238,7 @@ class NeuralNetwork:
     for i in range(10000):
         sess.run(train_step, feed_dict={X: trX, Y: trY, p_keep_input: 0.8, p_keep_hidden: 0.5})
         result = sess.run(tf_accuracy, feed_dict={X: teX, Y: teY, p_keep_input: 1.0, p_keep_hidden: 1.0})
+        # Save data
         k.append(result)
         if (i % printSteps == 0):
           print("Run {},{}".format(i,result))
@@ -303,13 +305,11 @@ class NeuralNetwork:
     # Cost function
     cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
 
-    # Train the model
     learnRate = 0.01
 
     #Train using gradient descent
-    #train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
-    train_step = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cross_entropy)
-
+    train_step = tf.train.GradientDescentOptimizer(learnRate).minimize(cross_entropy)
+    #train_step = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cross_entropy)
 
     # Add accuracy checking nodes
     tf_correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
@@ -321,6 +321,7 @@ class NeuralNetwork:
     sess = tf.Session()
     sess.run(init)
 
+    # Split data
     percent_split = 0.7
     trX, teX, trY, teY = cross_validation.train_test_split(input_vector, 
               label_vector, test_size=(1.0-percent_split), random_state=0)
@@ -330,6 +331,7 @@ class NeuralNetwork:
     for i in range(10000):
       sess.run(train_step, feed_dict={x: trX, y_: trY})
       result = sess.run(tf_accuracy, feed_dict={x: teX, y_: teY})
+      # Save result
       k.append(result)
       if (i % printSteps == 0):
         print("Run {},{}".format(i,result))
@@ -350,22 +352,18 @@ class NeuralNetwork:
 
     n_totalrows = int((len(label_vector)/n_datapoints))
     k=[]
-    for n in range(0, n_totalrows):
-      trainData, testData, trainLabels, testLabels = \
+    trainData, testData, trainLabels, testLabels = \
         cross_validation.train_test_split(input_vector, label_vector, test_size=(0.2))
+
+    for n in range(0, n_totalrows):
 
       limited_label_vector = trainLabels[0: (n+1) * n_datapoints]
       limited_input_vector = trainData[0: (n+1) * n_datapoints]
 
-      average = []
-      for a in range(0,5):
-        _, maxVal = self.trainSoftmaxWithData(limited_input_vector, limited_label_vector, 1000)
-        average.append(maxVal)
+      _, maxVal = self.trainSoftmaxWithData(limited_input_vector, limited_label_vector, 1000)
 
-      averageMaxVal = sum(average) / len(average)
-      print 'Total Average Value: %s \n\n' % (averageMaxVal)
-      average = []
-      k.append(averageMaxVal)
+      print 'Total Average Value: %s \n\n' % (maxVal)
+      k.append(maxVal)
 
     print('Limited Softmax training result ----------')
     for i in range (0,len(k)):
