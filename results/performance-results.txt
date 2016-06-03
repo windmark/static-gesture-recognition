@@ -1,0 +1,74 @@
+
+
+Classification report for classifier k-NearestNeighbour:
+             precision    recall  f1-score   support
+
+    ALCOHOL       1.00      1.00      1.00        22
+       CASH       1.00      0.88      0.94        17
+   CHECKOUT       0.78      0.95      0.86        19
+     CREDIT       1.00      1.00      1.00        24
+       FOOD       1.00      0.79      0.88        19
+       INIT       1.00      1.00      1.00        15
+NON-ALCOHOL       0.82      1.00      0.90        18
+       UNDO       0.96      0.88      0.92        25
+
+avg / total       0.95      0.94      0.94       159
+
+
+Confusion matrix:
+[[22  0  0  0  0  0  0  0]
+ [ 0 15  2  0  0  0  0  0]
+ [ 0  0 18  0  0  0  0  1]
+ [ 0  0  0 24  0  0  0  0]
+ [ 0  0  0  0 15  0  4  0]
+ [ 0  0  0  0  0 15  0  0]
+ [ 0  0  0  0  0  0 18  0]
+ [ 0  0  3  0  0  0  0 22]]
+Split Validation training :: Done.
+
+----- Wrong predictions -----
+('Expected', 'FOOD', 'Predicted', 'NON-ALCOHOL')
+('Expected', 'FOOD', 'Predicted', 'NON-ALCOHOL')
+('Expected', 'FOOD', 'Predicted', 'NON-ALCOHOL')
+('Expected', 'FOOD', 'Predicted', 'NON-ALCOHOL')
+('Expected', 'CASH', 'Predicted', 'CHECKOUT')
+('Expected', 'CASH', 'Predicted', 'CHECKOUT')
+('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
+('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
+('Expected', 'UNDO', 'Predicted', 'CHECKOUT')
+('Expected', 'CHECKOUT', 'Predicted', 'UNDO')
+
+----- k-fold Cross Validation -----
+[ 0.91666667  0.74766355  0.85046729  0.85576923  0.84313725]
+('Average: ', 0.84274079869187069)
+
+
+-----------------------------------------------
+SINGLE INDIVIDUAL
+
+Classification report for classifier k-NearestNeighbour:
+             precision    recall  f1-score   support
+
+    ALCOHOL       1.00      1.00      1.00         5
+       CASH       1.00      1.00      1.00         5
+   CHECKOUT       0.83      1.00      0.91         5
+     CREDIT       1.00      1.00      1.00         5
+       FOOD       1.00      1.00      1.00         5
+       INIT       1.00      1.00      1.00         5
+NON-ALCOHOL       1.00      1.00      1.00         5
+       UNDO       1.00      0.80      0.89         5
+
+avg / total       0.98      0.97      0.97        40
+
+
+Confusion matrix:
+[[5 0 0 0 0 0 0 0]
+ [0 5 0 0 0 0 0 0]
+ [0 0 5 0 0 0 0 0]
+ [0 0 0 5 0 0 0 0]
+ [0 0 0 0 5 0 0 0]
+ [0 0 0 0 0 5 0 0]
+ [0 0 0 0 0 0 5 0]
+ [0 0 1 0 0 0 0 4]]
+Split Validation training :: Done.
+
