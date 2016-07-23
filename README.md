@@ -54,9 +54,10 @@ See our blog from the project [here.](https://cvml1.wordpress.com/)
 Link to our paper?
 
 ## Team
-[![Christofer Lind](https://avatars0.githubusercontent.com/u/5421089?v=3&s=144)](https://github.com/chilind) | [![Maria Svensson](https://avatars2.githubusercontent.com/u/5993475?v=3&s=144)](https://github.com/mariasvenson) | [![Babak Toghiani-Rizi](https://avatars2.githubusercontent.com/u/5991620?v=3&s=144)](https://github.com/babaktr) | [![Marcus Windmark](https://avatars0.githubusercontent.com/u/3810163?v=3&s=144)](https://github.com/windmark)
----|---|---
-[Christofer Lind](https://github.com/chilind) | [Maria Svensson](https://github.com/mariasvenson) | [Babak Toghiani-Rizi](https://github.com/babaktr) | [Marcus Windmark](https://github.com/windmark)
+[![Christofer Lind](https://avatars0.githubusercontent.com/u/5421089?v=3&s=144)](https://github.com/chilind)
+[![Maria Svensson](https://avatars2.githubusercontent.com/u/5993475?v=3&s=144)](https://github.com/mariasvenson)
+[![Babak Toghiani-Rizi](https://avatars2.githubusercontent.com/u/5991620?v=3&s=144)](https://github.com/babaktr)
+[![Marcus Windmark](https://avatars0.githubusercontent.com/u/3810163?v=3&s=144)](https://github.com/windmark)
 
 ## License
 License?
