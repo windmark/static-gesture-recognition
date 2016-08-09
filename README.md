@@ -1,13 +1,11 @@
-Static Gesture Recognition
-===
-##_using Leap motion_
+Static Gesture Recognition using Leap motion
+==
 
 **An automated bartender system for making orders in a bar using hand gestures.**
 
-> We used a Leap Motion to find coordinates of palms and fingertips for a users both hands.
-Then we trained a model, using machine learning, to recognize eight static hand gestures.
-These gestures, and a UI, allowed a user to order any amount of drinks or food, undo actions
-and finally order using either cash or credit payment in a fictitious bar.
+> The purpose of this project was to develop an ordering system for a bar where orders were made only by using static hand gestures. 
+With the help of a Leap Motion controller, we used Machine Learning to train a model to recognize 8 different hand gestures, in which the user could (with the support of the UI) navigate the ordering system ordering any number of drinks, foods and even to select payment option by using hand gestures.
+
 
 ## Features
 * Static hand gesture recognition.
@@ -16,7 +14,6 @@ and finally order using either cash or credit payment in a fictitious bar.
 
 ## Requirements
 - A [Leap Motion.](https://www.leapmotion.com/)
-- Leap Motion SDK?
 
 ## Run
 `$ py mainProgram.py`
@@ -50,8 +47,8 @@ written and spoken response.
 ## Blog
 See our blog from the project [here.](https://cvml1.wordpress.com/)
 
-## Paper
-Link to our paper?
+## Report
+[Project report.](https://github.com/windmark/static-gesture-recognition/blob/master/report.pdf)
 
 ## Team
 [![Christofer Lind](https://avatars0.githubusercontent.com/u/5421089?v=3&s=144)](https://github.com/chilind)
@@ -59,5 +56,3 @@ Link to our paper?
 [![Babak Toghiani-Rizi](https://avatars2.githubusercontent.com/u/5991620?v=3&s=144)](https://github.com/babaktr)
 [![Marcus Windmark](https://avatars0.githubusercontent.com/u/3810163?v=3&s=144)](https://github.com/windmark)
 
-## License
-License?
