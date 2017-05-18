@@ -1,11 +1,12 @@
 Static Gesture Recognition using Leap motion
 ==
 
-**An automated bartender system for making orders in a bar using hand gestures.**
+**An automated bar ordering system for making orders in a bar using hand gestures.**
 
 > The purpose of this project was to develop an ordering system for a bar where orders were made only by using static hand gestures. 
-With the help of a Leap Motion controller, we used Machine Learning to train a model to recognize 8 different hand gestures, in which the user could (with the support of the UI) navigate the ordering system ordering any number of drinks, foods and even to select payment option by using hand gestures.
+With the help of a Leap Motion controller, we used Machine Learning to train a model to recognize 8 different hand gestures, in which the user could (with the support of the UI) navigate the ordering system ordering any number of drinks, foods and even to select payment option solely by using hand gestures.
 
+Paper available [here](https://arxiv.org/abs/1705.05884).
 
 ## Features
 * Static hand gesture recognition.
